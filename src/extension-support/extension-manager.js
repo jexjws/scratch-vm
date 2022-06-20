@@ -11,8 +11,26 @@ const BlockType = require('./block-type');
 const builtinExtensions = {
     // This is an example that isn't loaded with the other core blocks,
     // but serves as a reference for loading core blocks as extensions.
+    // This is an example that isn't loaded with the other core blocks,
+    // but serves as a reference for loading core blocks as extensions.
     coreExample: () => require('../blocks/scratch3_core_example'),
     // These are the non-core built-in extensions.
+    
+    //by yj
+    lazyAudio: () => require('../extensions/scratch3_lazy_audio'),
+    canvas: () => require('../extensions/scratch3_canvas'),
+    yun: () => require('../extensions/scratch3_yun'),
+    //battle: () => require('../extensions/scratch3_battle'),
+    js: () => require('../extensions/scratch3_js'),
+    three: () => require('../extensions/scratch3_three'),
+    box: () => require('../extensions/scratch3_box'),
+    //stringExt: () => require('../extensions/scratch3_string_ext'),
+    //puzzle: () => require('../extensions/scratch3_puzzle'),
+    community: () => require('../extensions/scratch3_community'),
+    community2: () => require('../extensions/scratch3_community2'),
+    yx: () => require('../extensions/scratch3_yx'),
+    //kinect: () => require('../extensions/scratch3_kinect'),
+    set: () => require('../extensions/scratch3_set'),
     pen: () => require('../extensions/scratch3_pen'),
     wedo2: () => require('../extensions/scratch3_wedo2'),
     music: () => require('../extensions/scratch3_music'),
