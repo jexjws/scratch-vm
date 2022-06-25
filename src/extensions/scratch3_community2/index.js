@@ -83,11 +83,53 @@ class Scratch3CommunityBlocks {
             {
                 opcode: 'ale',
                 blockType: BlockType.COMMAND,
-                text: '弹窗 [TEXT]',
+                text: '弹窗 [TEXT] [title]',
                 arguments: {
                     TEXT: {
                         type: ArgumentType.STRING,
                         defaultValue: '弹窗内容'
+                    },
+                    title:{
+                        type: ArgumentType.STRING,
+                        defaultValue: '标题'
+                    }
+                }
+            },
+            {
+                opcode: 'aleAndWait',
+                blockType: BlockType.COMMAND,
+                text: '弹窗 [TEXT] [title] 并等待',
+                arguments: {
+                    TEXT: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '弹窗内容'
+                    },
+                    title:{
+                        type: ArgumentType.STRING,
+                        defaultValue: '标题'
+                    }
+                }
+            },
+            {
+                opcode: 'choice',
+                blockType: BlockType.REPORTER,
+                text: '返回 选择框 [TEXT] [title] [a] [b] 并等待',
+                arguments: {
+                    TEXT: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '内容'
+                    },
+                    title:{
+                        type: ArgumentType.STRING,
+                        defaultValue: '标题'
+                    },
+                    a: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '确定'
+                    },
+                    b:{
+                        type: ArgumentType.STRING,
+                        defaultValue: '取消'
                     }
                 }
             },
@@ -156,11 +198,35 @@ class Scratch3CommunityBlocks {
                     }
                 }
             },
+            {
+                opcode: 'upload',
+                blockType: BlockType.REPORTER,
+                text: '上传文件并获取文件内容，类型[type]',
+                arguments: {
+                    type: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '文本',
+                        menu:'type'
+                    }
+                }
+            },
+            {
+                opcode: 'setIntroduction',
+                blockType: BlockType.COMMAND,
+                text: '修改作品介绍[text]',
+                arguments: {
+                    text: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '# 此介绍已被修改'
+                    }
+                }
+            },
             ],
             menus: {
                 USER_ATTR: ['id', 'nickname', 'head','signtime'],
                 d:['大写','小写'],
-                time:['标准','时间戳']
+                time:['标准','时间戳'],
+                type:['文本']
             }
         };
     }
@@ -201,7 +267,71 @@ class Scratch3CommunityBlocks {
         return b;
     }
     ale(url) {
-        mdui.alert(url.TEXT);
+        mdui.alert(url.TEXT,url.title || '');
+    }
+    aleAndWait(url) {
+        return new Promise((resolve)=>{
+            mdui.alert(url.TEXT,url.title || '',()=>{
+                resolve()
+            });
+        })
+    }
+    upload(url) {
+        return new Promise((resolve)=>{
+            var d=mdui.dialog({
+                title: '请选择文件',
+                content: '<input type="file" class="uploadfile" accept=".txt" />',
+                buttons: [
+                  {
+                    text: '取消',
+                    onClick: function(inst){
+                       resolve('')
+                      }
+                  },
+                ]
+              });
+            var int=setInterval(()=>{
+                var f=$('.uploadfile');
+                if(!f[f.length-1].files.length) return;
+                var reader = new FileReader();//新建⼀个FileReader
+                clearInterval(int)
+                d.close();
+                try {
+                    reader.readAsText(f[f.length-1].files[0], "UTF-8")
+                    reader.onload = function(evt){ //读取完⽂件之后会回来这⾥
+                        var fileString = evt.target.result; // 读取⽂件内容
+                        console.log(fileString)
+                        resolve(fileString)
+                    }
+                    
+                } catch (error) {
+                    resolve('')
+                    console.log(error)
+                }
+            },100)
+        })
+    }
+    choice(a) {
+        return new Promise((resolve)=>{
+            mdui.dialog({
+                title: a.title,
+                content: a.TEXT,
+                buttons: [
+                  {
+                    text: a.a,
+                    onClick: function(inst){
+                       resolve(a.a)
+                      }
+                  },
+                  {
+                    text: a.b,
+                    onClick: function(inst){
+                        resolve(a.b)
+                    }
+                  }
+                ]
+              });
+        })
     }
     al2(url) {
         mdui.snackbar(url.TEXT);
@@ -262,7 +392,12 @@ class Scratch3CommunityBlocks {
     }*/
     isValidUrl(url) {
         //var regex2 = /^((blob)?:(sccode\.52msr\.cn|sccode\.ahy1\.top|music\.163\.com|sccode\.tk)|(\/[^\/]))/;
-        return ['40code.com','www.40code.com','music.163.com'].indexOf((new URL(url)).host)!=-1;//|| regex2.test(url.toLowerCase());
+        try {
+            return ['40code.com','www.40code.com','music.163.com'].indexOf((new URL(url)).host)!=-1;//|| regex2.test(url.toLowerCase());
+        } catch (error) {
+            return 0;
+        }
+        
     }
 
     openUrl(args, util) {
@@ -444,6 +579,14 @@ class Scratch3CommunityBlocks {
     }
     cf(a){
         return a.b.split(a.a)[a.c-1];
+    }
+    setIntroduction(a){
+        try{
+            top.v.workview.introduce2=top.markdownToHtml(a.text.slice(0,1000))
+        }catch(e){
+            mdui.snackbar("修改介绍(创作页提示)："+a.text)
+            console.log(e)
+        }
     }
     /*
         pay(args, util) {
