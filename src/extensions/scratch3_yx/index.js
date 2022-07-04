@@ -53,6 +53,17 @@ class Scratch3CommunityBlocks {
                 }
             },
             {
+                opcode: 'md5',
+                blockType: BlockType.REPORTER,
+                text: 'md5加密[text]',
+                arguments: {
+                    text: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '123456'
+                    }
+                }
+            },
+            {
                 opcode: 'js',
                 blockType: BlockType.REPORTER,
                 text: '运算[TEXT]',
@@ -189,7 +200,22 @@ class Scratch3CommunityBlocks {
                 arguments: {
                     b: {
                         type: ArgumentType.STRING,
-                        defaultValue: '/^[1]([3-9])[0-9]{9}$/',
+                        defaultValue: '^[1]([3-9])[0-9]{9}$',
+                    },
+                    a: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '18888888888',
+                    }
+                }
+            },
+            {
+                opcode: 'zz3',
+                blockType: BlockType.BOOLEAN,
+                text: '将[a]使用正则[b]匹配',
+                arguments: {
+                    b: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '^[1]([3-9])[0-9]{9}$',
                     },
                     a: {
                         type: ArgumentType.STRING,
@@ -204,7 +230,7 @@ class Scratch3CommunityBlocks {
                 arguments: {
                     b: {
                         type: ArgumentType.STRING,
-                        defaultValue: '/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g',
+                        defaultValue: '',
                     },
                     a: {
                         type: ArgumentType.STRING,
@@ -235,11 +261,51 @@ class Scratch3CommunityBlocks {
                     }
                 }
             },
+            {
+                opcode: 'tm',
+                blockType: BlockType.REPORTER,
+                text: '如果[a]返回[b]，否则返回[c]',
+                arguments: {
+                    a: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '1'
+                    },
+                    b: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '2'
+                    },
+                    c: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '1'
+                    }
+                }
+            },
+            {
+                opcode: 'operation',
+                blockType: BlockType.BOOLEAN,
+                text: '[a][operator][b]',
+                arguments: {
+                    a: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '1'
+                    },
+                    b: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '2'
+                    },
+                    operator: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '==',
+                        menu:'operator'
+                    }
+                }
+            },
             ],
             menus: {
                 USER_ATTR: ['user id', 'username'/*, 'user level'*/],
                 d:['大写','小写'],
-                time:['标准','时间戳']
+                time:['标准','时间戳'],
+                operator:['==','>=','<=']
             }
         };
     }
@@ -270,12 +336,6 @@ class Scratch3CommunityBlocks {
             }
         }
         return b;
-    }
-    ale(url) {
-        mdui.alert(url.TEXT);
-    }
-    al2(url) {
-        mdui.snackbar(url.TEXT);
     }
     js(url) {
         try{
@@ -419,6 +479,14 @@ class Scratch3CommunityBlocks {
         }
 
     }
+    md5({text}){
+        try {
+            return CryptoJS.MD5(text.toString()).toString()
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
     sha1(ss) {
         function encodeUTF8(s) {
             var i, r = [], c, x;
@@ -498,7 +566,8 @@ class Scratch3CommunityBlocks {
     zz(a) {
         try{
             let v=a.b;
-            return a.a.search(new RegExp(v));
+            console.log(a)
+            return a.a.toString().search(new RegExp(v));
         }catch(e){
             return e;
         }
@@ -511,6 +580,13 @@ class Scratch3CommunityBlocks {
             return a.a.replace(new RegExp(v),a.c);
         }catch(e){
             return e;
+        }
+    }
+    zz3({a,b}){
+        try {
+            return (new RegExp(b)).test(a.toString())
+        } catch (error) {
+            console.log(error);
         }
     }
     copy(a){
@@ -552,6 +628,19 @@ class Scratch3CommunityBlocks {
     }
     cf(a){
         return a.b.split(a.a)[a.c-1];
+    }
+    tm({a,b,c}){
+        return a?b:c
+    }
+    operation({a,operator,b}){
+        switch (operator) {
+            case '==':
+                return a===b;
+            case '>=':
+                return a>=b;
+            case '<=':
+                return a<=b;
+        }
     }
     /*
         pay(args, util) {

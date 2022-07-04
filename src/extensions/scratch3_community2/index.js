@@ -267,11 +267,11 @@ class Scratch3CommunityBlocks {
         return b;
     }
     ale(url) {
-        mdui.alert(url.TEXT,url.title || '');
+        mdui.alert(markdownToHtml(url.TEXT),markdownToHtml(url.title) || '');
     }
     aleAndWait(url) {
         return new Promise((resolve)=>{
-            mdui.alert(url.TEXT,url.title || '',()=>{
+            mdui.alert(markdownToHtml(url.TEXT),markdownToHtml(url.title) || '',()=>{
                 resolve()
             });
         })
@@ -314,8 +314,8 @@ class Scratch3CommunityBlocks {
     choice(a) {
         return new Promise((resolve)=>{
             mdui.dialog({
-                title: a.title,
-                content: a.TEXT,
+                title: markdownToHtml(a.title),
+                content: markdownToHtml(a.TEXT),
                 buttons: [
                   {
                     text: a.a,
@@ -334,7 +334,7 @@ class Scratch3CommunityBlocks {
         })
     }
     al2(url) {
-        mdui.snackbar(url.TEXT);
+        mdui.snackbar(markdownToHtml(url.TEXT));
     }
     js(url) {
         try{
@@ -584,7 +584,7 @@ class Scratch3CommunityBlocks {
         try{
             top.v.workview.introduce2=top.markdownToHtml(a.text.slice(0,1000))
         }catch(e){
-            mdui.snackbar("修改介绍(创作页提示)："+a.text)
+            mdui.snackbar("修改介绍(创作页提示)："+markdownToHtml(a.text))
             console.log(e)
         }
     }

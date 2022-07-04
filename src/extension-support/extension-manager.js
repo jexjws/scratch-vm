@@ -26,6 +26,7 @@ const builtinExtensions = {
     astar: () => require('../extensions/scratch3_astar'),
     three: () => require('../extensions/scratch3_three'),
     box: () => require('../extensions/scratch3_box'),
+    ws:()=>require('../extensions/scratch3_ws'),
     //stringExt: () => require('../extensions/scratch3_string_ext'),
     //puzzle: () => require('../extensions/scratch3_puzzle'),
     community: () => require('../extensions/scratch3_community'),

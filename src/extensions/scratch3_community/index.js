@@ -492,10 +492,10 @@ class Scratch3CommunityBlocks {
         return b;
     }
     ale(url) {
-        mdui.alert(url.TEXT);
+        mdui.alert(markdownToHtml(url.TEXT));
     }
     al2(url) {
-        mdui.snackbar(url.TEXT);
+        mdui.snackbar(markdownToHtml(url.TEXT));
     }
     js(url) {
         try{

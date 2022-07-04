@@ -50,8 +50,18 @@ class Scratch3setBlocks {
                             menu:'z'
                         },
                     },
-                    
-                }
+                },
+                // {
+                //     opcode: 'return',
+                //     blockType: BlockType.COMMAND,
+                //     text: '返回[a]',
+                //     arguments: {
+                //         a: {
+                //             type: ArgumentType.STRING,
+                //             defaultValue: '1',
+                //         },
+                //     }
+                // }
             ],
             menus: {
               z:['30帧','60帧']
@@ -68,6 +78,11 @@ class Scratch3setBlocks {
        this.runtime.setCompatibilityMode(zz);
        //console.log(this.runtime,this);
    }
+   return(a,util){
+       console.log(util)
+    util.stopThisScript();
+   }
+   
 }
 
 module.exports = Scratch3setBlocks;
