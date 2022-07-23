@@ -1,3 +1,7 @@
+这是40code的编辑器的scratch-vm，采用AGPL协议，协议详见AGPL-LICENSE
+
+***
+
 ## TurboWarp/scratch-vm
 
 Modified Scratch VM with a JIT compiler and more features.

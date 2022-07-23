@@ -42,9 +42,16 @@ class Scratch3threeBlocks {
                 {
                     opcode: 'f',
                     blockType: BlockType.COMMAND,
-                    text: '初始化3D引擎',
+                    text: '初始化3D引擎，宽[x]，高[y]',
                     arguments: {
-
+                        x: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '480',
+                        },
+                        y: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '360',
+                        },
                     },
                 },
                 {
@@ -331,6 +338,7 @@ class Scratch3threeBlocks {
                       
                     },
                 },
+                
                 // {
                 //     opcode: 're',
                 //     blockType: BlockType.COMMAND,
@@ -357,10 +365,10 @@ class Scratch3threeBlocks {
     ad() {
 
     }
-    f(a) {
+    f({x,y}) {
             temp2['3d-'] = new THREE.Scene();
-            var width = 480; //窗口宽度
-            var height = 360; //窗口高度
+            var width = x||480; //窗口宽度
+            var height = y||360; //窗口高度
             var k = width / height; //窗口宽高比
             var s = 200; //三维场景显示范围控制系数，系数越大，显示的范围越大
             //创建相机对象

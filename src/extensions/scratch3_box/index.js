@@ -386,7 +386,7 @@ class Scratch3Griffpatch {
      * @type {string}
      */
     static get STATE_KEY () {
-        return 'Scratch.Griffpatch';
+        return 'Scratch.box2d';
     }
 
     /**
@@ -394,7 +394,7 @@ class Scratch3Griffpatch {
      */
     getInfo () {
         return {
-            id: 'griffpatch',
+            id: 'box2d',
             name: formatMessage({
                 id: 'griffpatch.categoryName',
                 default: 'Physics',
@@ -410,8 +410,8 @@ class Scratch3Griffpatch {
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
                         id: 'griffpatch.setStage',
-                        default: 'setup stage [stageType]',
-                        description: 'Set the stage type'
+                        default: '把空间设置为[stageType]',
+                        description: '把空间设置为'
                     }),
                     arguments: {
                         stageType: {
@@ -426,7 +426,7 @@ class Scratch3Griffpatch {
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
                         id: 'griffpatch.setGravity',
-                        default: 'set gravity to x: [gx] y: [gy]',
+                        default: '将重力设置为 x: [gx] y: [gy]',
                         description: 'Set the gravity'
                     }),
                     arguments: {
@@ -448,7 +448,7 @@ class Scratch3Griffpatch {
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
                         id: 'griffpatch.setPhysics',
-                        default: 'enable for [shape] mode [mode]',
+                        default: '为 [shape] 区域范围 开启 [mode]',
                         description: 'Enable Physics for this Sprite'
                     }),
                     arguments: {
@@ -497,7 +497,7 @@ class Scratch3Griffpatch {
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
                         id: 'griffpatch.doTick',
-                        default: 'step simulation',
+                        default: '分步模拟',
                         description: 'Run a single tick of the physics simulation'
                     })
                 },
@@ -509,7 +509,7 @@ class Scratch3Griffpatch {
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
                         id: 'griffpatch.setPosition',
-                        default: 'go to x: [x] y: [y] [space]',
+                        default: '移动到 x: [x] y: [y] [space]',
                         description: 'Position Sprite'
                     }),
                     arguments: {
@@ -541,7 +541,7 @@ class Scratch3Griffpatch {
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
                         id: 'griffpatch.setVelocity',
-                        default: 'set velocity to sx: [sx] sy: [sy]',
+                        default: '将速度设为 sx: [sx] sy: [sy]',
                         description: 'Set Velocity'
                     }),
                     arguments: {
@@ -560,7 +560,7 @@ class Scratch3Griffpatch {
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
                         id: 'griffpatch.changeVelocity',
-                        default: 'change velocity by sx: [sx] sy: [sy]',
+                        default: '将速度增加 sx: [sx] sy: [sy]',
                         description: 'Change Velocity'
                     }),
                     arguments: {
@@ -578,7 +578,7 @@ class Scratch3Griffpatch {
                     opcode: 'getVelocityX',
                     text: formatMessage({
                         id: 'griffpatch.getVelocityX',
-                        default: 'x velocity',
+                        default: 'x 速度',
                         description: 'get the x velocity'
                     }),
                     blockType: BlockType.REPORTER
@@ -587,7 +587,7 @@ class Scratch3Griffpatch {
                     opcode: 'getVelocityY',
                     text: formatMessage({
                         id: 'griffpatch.getVelocityY',
-                        default: 'y velocity',
+                        default: 'y 速度',
                         description: 'get the y velocity'
                     }),
                     blockType: BlockType.REPORTER
@@ -600,7 +600,7 @@ class Scratch3Griffpatch {
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
                         id: 'griffpatch.applyForce',
-                        default: 'push with force [force] in direction [dir]',
+                        default: '用大小为 [force] 方向为 [dir] 的力推角色',
                         description: 'Push this object in a given direction'
                     }),
                     arguments: {
@@ -619,7 +619,7 @@ class Scratch3Griffpatch {
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
                         id: 'griffpatch.applyAngForce',
-                        default: 'spin with force [force]',
+                        default: '用大小为[force]的力转到角色',
                         description: 'Push this object in a given direction'
                     }),
                     arguments: {
@@ -637,7 +637,7 @@ class Scratch3Griffpatch {
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
                         id: 'griffpatch.setStatic',
-                        default: 'set fixed [static]',
+                        default: '将角色设置为 [static]',
                         description: 'Sets whether this block is static or dynamic'
                     }),
                     arguments: {
@@ -668,7 +668,7 @@ class Scratch3Griffpatch {
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
                         id: 'griffpatch.setProperties',
-                        default: 'set density [density] roughness [friction] bounce [restitution]',
+                        default: '设置角色的密度 [density] 粗糙度 [friction] 弹性 [restitution]',
                         description: 'Set the density of the object'
                     }),
                     arguments: {
@@ -715,7 +715,7 @@ class Scratch3Griffpatch {
                     opcode: 'getTouching',
                     text: formatMessage({
                         id: 'griffpatch.getTouching',
-                        default: 'touching [where]',
+                        default: '触碰到角色的 [where]',
                         description: 'get the name of any sprites we are touching'
                     }),
                     blockType: BlockType.REPORTER,
@@ -737,7 +737,7 @@ class Scratch3Griffpatch {
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
                         id: 'griffpatch.setScroll',
-                        default: 'set scroll x: [ox] y: [oy]',
+                        default: '将舞台滚动区设为 x: [ox] y: [oy]',
                         description: 'Sets whether this block is static or dynamic'
                     }),
                     arguments: {
@@ -756,7 +756,7 @@ class Scratch3Griffpatch {
                     blockType: BlockType.COMMAND,
                     text: formatMessage({
                         id: 'griffpatch.changeScroll',
-                        default: 'change scroll by x: [ox] y: [oy]',
+                        default: '将舞台滚动区增加 x: [ox] y: [oy]',
                         description: 'Sets whether this block is static or dynamic'
                     }),
                     arguments: {
@@ -774,7 +774,7 @@ class Scratch3Griffpatch {
                     opcode: 'getScrollX',
                     text: formatMessage({
                         id: 'griffpatch.getScrollX',
-                        default: 'x scroll',
+                        default: '舞台滚动x',
                         description: 'get the x scroll'
                     }),
                     blockType: BlockType.REPORTER
@@ -783,7 +783,7 @@ class Scratch3Griffpatch {
                     opcode: 'getScrollY',
                     text: formatMessage({
                         id: 'griffpatch.getScrollY',
-                        default: 'y scroll',
+                        default: '舞台滚动y',
                         description: 'get the y scroll'
                     }),
                     blockType: BlockType.REPORTER
@@ -817,79 +817,79 @@ class Scratch3Griffpatch {
 
     get STAGE_TYPE_MENU () {
         return [
-            {text: 'boxed stage', value: STAGE_TYPE_OPTIONS.BOXED},
-            {text: 'open (with floor)', value: STAGE_TYPE_OPTIONS.FLOOR},
-            {text: 'open (no floor)', value: STAGE_TYPE_OPTIONS.OPEN}
+            {text: '舞台区内', value: STAGE_TYPE_OPTIONS.BOXED},
+            {text: '开放舞台区 (有地面)', value: STAGE_TYPE_OPTIONS.FLOOR},
+            {text: '开放舞台区 (无地面)', value: STAGE_TYPE_OPTIONS.OPEN}
         ];
     }
 
     get SPACE_TYPE_MENU () {
         return [
-            {text: 'in world', value: SPACE_TYPE_OPTIONS.WORLD},
-            {text: 'on stage', value: SPACE_TYPE_OPTIONS.STAGE},
-            {text: 'relative', value: SPACE_TYPE_OPTIONS.RELATIVE}
+            {text: '在空间中', value: SPACE_TYPE_OPTIONS.WORLD},
+            {text: '在舞台区中', value: SPACE_TYPE_OPTIONS.STAGE},
+            {text: '相对位置', value: SPACE_TYPE_OPTIONS.RELATIVE}
         ];
     }
 
     get WHERE_TYPE_MENU () {
         return [
-            {text: 'any', value: WHERE_TYPE_OPTIONS.ANY},
-            {text: 'feet', value: WHERE_TYPE_OPTIONS.FEET}
+            {text: '任一位置', value: WHERE_TYPE_OPTIONS.ANY},
+            {text: '底部', value: WHERE_TYPE_OPTIONS.FEET}
         ];
     }
 
     get SHAPE_TYPE_MENU () {
         return [
-            {text: 'this costume', value: SHAPE_TYPE_OPTIONS.COSTUME},
-            {text: 'this circle', value: SHAPE_TYPE_OPTIONS.CIRCLE},
-            {text: 'this polygon', value: SHAPE_TYPE_OPTIONS.SVG_POLYGON},
-            {text: 'all sprites', value: SHAPE_TYPE_OPTIONS.ALL}
+            {text: '造型', value: SHAPE_TYPE_OPTIONS.COSTUME},
+            {text: '圆形', value: SHAPE_TYPE_OPTIONS.CIRCLE},
+            {text: '多边形', value: SHAPE_TYPE_OPTIONS.SVG_POLYGON},
+            {text: '所有角色', value: SHAPE_TYPE_OPTIONS.ALL}
         ];
     }
 
     get ENABLE_TYPES_TYPE_MENU () {
         return [
-            {text: 'normal', value: 'normal'},
-            {text: 'precision', value: 'bullet'}
+            {text: '普通', value: 'normal'},
+            {text: '精确', value: 'bullet'}
         ];
     }
 
     get STATIC_TYPE_MENU () {
         return [
-            {text: 'free', value: 'dynamic'},
-            {text: 'fixed in place', value: 'static'},
-            {text: 'fixed (but can rotate)', value: 'pinned'}
+            {text: '自由的', value: 'dynamic'},
+            {text: '固定的', value: 'static'},
+            {text: '固定的 (可以旋转)', value: 'pinned'}
         ];
     }
 
     get DENSITY_TYPE_MENU () {
         return [
-            {text: 'very light', value: '25'},
-            {text: 'light', value: '50'},
-            {text: 'normal', value: '100'},
-            {text: 'heavy', value: '200'},
-            {text: 'very heavy', value: '400'}
+            {text: '非常轻', value: '25'},
+            {text: '轻', value: '50'},
+            {text: '普通', value: '100'},
+            {text: '重', value: '200'},
+            {text: '非常重', value: '400'}
         ];
     }
 
     get FRICTION_TYPE_MENU () {
         return [
-            {text: 'none', value: '0'},
-            {text: 'smooth', value: '20'},
-            {text: 'normal', value: '50'},
-            {text: 'rough', value: '75'},
-            {text: 'extremely rough', value: '100'}
+            {text: '无摩擦', value: '0'},
+            {text: '光滑', value: '20'},
+            {text: '正常', value: '50'},
+            {text: '粗糙', value: '75'},
+            {text: '非常粗糙', value: '100'}
         ];
     }
 
     get RESTITUTION_TYPE_MENU () {
         return [
-            {text: 'none', value: '0'},
-            {text: 'little', value: '10'},
-            {text: 'normal', value: '20'},
-            {text: 'quite bouncy', value: '40'},
-            {text: 'very bouncy', value: '70'},
-            {text: 'unstable', value: '100'}
+            {text: '无', value: '0'},
+            {text: '一点点', value: '10'},
+            {text: '正常', value: '20'},
+            {text: '较有弹性', value: '40'},
+            {text: '非常有弹性', value: '70'},
+            {text: '不稳定的', value: '100'}
         ];
     }
 

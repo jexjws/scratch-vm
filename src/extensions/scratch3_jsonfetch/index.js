@@ -66,6 +66,36 @@ class Scratch3JsonBlocks {
                     }
                 },
                 {
+                    opcode: 'getScratchList',
+                    blockType: BlockType.REPORTER,
+                    text: '获取scratch列表[name]',
+                    arguments: {
+                        name: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'scratch列表名'
+                        },
+                        value:{
+                            type: ArgumentType.STRING,
+                            defaultValue: '[114,5,1,4]'
+                        }
+                    }
+                },
+                {
+                    opcode: 'setScratchList',
+                    blockType: BlockType.COMMAND,
+                    text: '设置scratch列表[name]，值为[value]',
+                    arguments: {
+                        name: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'scratch列表名'
+                        },
+                        value:{
+                            type: ArgumentType.STRING,
+                            defaultValue: '[114,5,1,4]'
+                        }
+                    }
+                },
+                {
                     opcode: 'dx2',
                     blockType: BlockType.REPORTER,
                     text: 'json[a]的第[b]项',
@@ -225,6 +255,14 @@ class Scratch3JsonBlocks {
     fetch(a){
         this.fetchAndWait(a)
     }
+    getScratchList({value,name},util){
+        let list=util.target.lookupVariableByNameAndType(name,'list')
+        return JSON.stringify(list && list.value);
+    }
+    setScratchList({value,name},util){
+        let list=util.target.lookupVariableByNameAndType(name,'list')
+        list && value && (list.value=JSON.parse(value));
+    }
     fetchAndWait(a){
         this._f()
         try {
@@ -250,6 +288,7 @@ class Scratch3JsonBlocks {
                 return d.text();
             })
             .then(res=>{
+                temp2.fetch.error=''
                 resolve(temp2.fetch.res=res)
             })
             .catch(e=>{

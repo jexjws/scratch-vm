@@ -289,7 +289,7 @@ class Scratch3CanvasBlocks {
                     arguments: {
                         IMAGE_ID: {
                             type: ArgumentType.STRING,
-                            defaultValue: 'https://sccode.52msr.cn/img/headimg/person-icon.png'
+                            defaultValue: 'https://40code-cdn.zq990.com/static/internalapi/asset/0214ed33dab7c5614594feecd44e5e4f.jpg'
                         }
                     }
                 },
@@ -300,7 +300,7 @@ class Scratch3CanvasBlocks {
                     arguments: {
                         IMAGE_ID: {
                             type: ArgumentType.STRING,
-                            defaultValue: 'https://sccode.52msr.cn/img/headimg/person-icon.png'
+                            defaultValue: 'https://40code-cdn.zq990.com/static/internalapi/asset/0214ed33dab7c5614594feecd44e5e4f.jpg'
                         },
                         X: {
                             type: ArgumentType.NUMBER,
@@ -319,7 +319,7 @@ class Scratch3CanvasBlocks {
                     arguments: {
                         IMAGE_ID: {
                             type: ArgumentType.STRING,
-                            defaultValue: 'https://sccode.52msr.cn/img/headimg/person-icon.png'
+                            defaultValue: 'https://40code-cdn.zq990.com/static/internalapi/asset/0214ed33dab7c5614594feecd44e5e4f.jpg'
                         },
                         X: {
                             type: ArgumentType.NUMBER,
@@ -346,7 +346,7 @@ class Scratch3CanvasBlocks {
                     arguments: {
                         IMAGE_ID: {
                             type: ArgumentType.STRING,
-                            defaultValue: 'https://sccode.52msr.cn/img/headimg/person-icon.png'
+                            defaultValue: 'https://40code-cdn.zq990.com/static/internalapi/asset/0214ed33dab7c5614594feecd44e5e4f.jpg'
                         },
                         SX: {
                             type: ArgumentType.NUMBER,
@@ -389,7 +389,7 @@ class Scratch3CanvasBlocks {
                     arguments: {
                         IMAGE_ID: {
                             type: ArgumentType.STRING,
-                            defaultValue: 'https://sccode.52msr.cn/img/headimg/person-icon.png'
+                            defaultValue: 'https://40code-cdn.zq990.com/static/internalapi/asset/0214ed33dab7c5614594feecd44e5e4f.jpg'
                         },
                     }
                 },
@@ -400,12 +400,12 @@ class Scratch3CanvasBlocks {
                     arguments: {
                         IMAGE_ID: {
                             type: ArgumentType.STRING,
-                            defaultValue: 'https://sccode.52msr.cn/img/headimg/person-icon.png'
+                            defaultValue: 'https://40code-cdn.zq990.com/static/internalapi/asset/0214ed33dab7c5614594feecd44e5e4f.jpg'
                         },
                     }
                 },
-                /*,
-                {
+                
+                ,{
                     opcode: 'drawv',
                     blockType: BlockType.COMMAND,
                     text: '绘制视频当前帧([IMAGE_ID],[X],[Y])',
@@ -423,7 +423,77 @@ class Scratch3CanvasBlocks {
                             defaultValue: '0'
                         }
                     }
-                }*/,
+                },
+                {
+                    opcode: 'drawv2',
+                    blockType: BlockType.COMMAND,
+                    text: '绘制视频当前帧([IMAGE_ID] X[X] Y[Y] 宽度[w] 高度[h])',
+                    arguments: {
+                        IMAGE_ID: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'https://40code-cdn.zq990.com/static/internalapi/asset/0214ed33dab7c5614594feecd44e5e4f.jpg'
+                        },
+                        X: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        },
+                        Y: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        },
+                        w: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        },
+                        h: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        }
+                    }
+                },
+                {
+                    opcode: 'drawv3',
+                    blockType: BlockType.COMMAND,
+                    text: '绘制视频当前帧([IMAGE_ID] 起始X[SX] Y[SY] 宽度[sw] 高度[sh]；结束X[X] Y[Y] 宽度[w] 高度[h])',
+                    arguments: {
+                        IMAGE_ID: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'https://40code-cdn.zq990.com/static/internalapi/asset/0214ed33dab7c5614594feecd44e5e4f.jpg'
+                        },
+                        SX: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        },
+                        SY: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        },
+                        sw: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        },
+                        sh: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        },
+                        X: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        },
+                        Y: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        },
+                        w: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        },
+                        h: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        }
+                    }
+                },
                 {
                     opcode: 'scale',
                     blockType: BlockType.COMMAND,
@@ -548,6 +618,29 @@ class Scratch3CanvasBlocks {
                     opcode: 'stampOnStage',
                     blockType: BlockType.COMMAND,
                     text: '显示canvas内容'
+                },
+                {
+                    opcode: 'stampOnStageDev',
+                    blockType: BlockType.COMMAND,
+                    text: '显示canvas内容([ox],[oy],[ox2],[oy2])',
+                    arguments: {
+                        ox: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '0'
+                        },
+                        oy: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '0'
+                        },
+                        ox2: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '480'
+                        },
+                        oy2: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '360'
+                        }
+                    }
                 },
                 {
                     opcode: 'setLineDash',
@@ -1118,6 +1211,35 @@ class Scratch3CanvasBlocks {
 
         }
     }
+    drawv2(args, util) {
+        const ctx = this._getContext();
+        if (!ctx) return;
+        const mp3 = Cast.toString(args.IMAGE_ID);
+        const x = Cast.toNumber(args.X);
+        const y = Cast.toNumber(args.Y);
+        const w = Cast.toNumber(args.w);
+        const h = Cast.toNumber(args.h);
+        this._ad();
+        if(temp2['music'][mp3])
+        ctx.drawImage(temp2['music'][mp3], x, y, w, h);
+    }
+    drawv3(args, util) {
+        const ctx = this._getContext();
+        if (!ctx) return;
+        const mp3 = Cast.toString(args.IMAGE_ID);
+        const sx = Cast.toNumber(args.SX);
+        const sy = Cast.toNumber(args.SY);
+        const sw = Cast.toNumber(args.sw);
+        const sh = Cast.toNumber(args.sh);
+        const x = Cast.toNumber(args.X);
+        const y = Cast.toNumber(args.Y);
+        const w = Cast.toNumber(args.w);
+        const h = Cast.toNumber(args.h);
+        this._ad();
+        if(temp2['music'][mp3])
+        ctx.drawImage(temp2['music'][mp3], sx, sy, sw, sh, x, y, w, h);
+    }
+
     // loadImage(args, util) {
     //     const ctx = this._getContext();
     //     if (!ctx) return;
@@ -1269,6 +1391,17 @@ class Scratch3CanvasBlocks {
         this.runtime.renderer.penStamp(this.runtime.penSkinId, this._drawableId);
         this.runtime.requestRedraw();
     }
+    stampOnStageDev({ox,oy,ox2,oy2}) {
+        const ctx = this._getContext();
+        if (!ctx) return;
+
+        var imageData = ctx.getImageData(ox, oy,ox2,oy2);
+        var skin = this.runtime.renderer._allSkins[this._skinId];
+        skin._setTexture(imageData);
+        this.runtime.renderer.penStamp(this.runtime.penSkinId, this._drawableId);
+        this.runtime.requestRedraw();
+    }
+
     setLineDash(a) {
         const ctx = this._getContext();
         if (!ctx) return;

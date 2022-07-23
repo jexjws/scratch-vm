@@ -41,14 +41,26 @@ class Scratch3CommunityBlocks {
             name: '社区模块',
             blockIconURI: blockIconURI,
             blocks: [
-                {
+            {
                 opcode: 'getUserInfo',
                 blockType: BlockType.REPORTER,
-                text: '用户[USER_ATTR]',
+                text: '访问者[USER_ATTR]',
                 arguments: {
                     USER_ATTR: {
                         type: ArgumentType.STRING,
                         menu: 'USER_ATTR',
+                        defaultValue: 'id'
+                    }
+                }
+            },
+            {
+                opcode: 'getWorkInfo',
+                blockType: BlockType.REPORTER,
+                text: '作品[WORK_ATTR]',
+                arguments: {
+                    WORK_ATTR: {
+                        type: ArgumentType.STRING,
+                        menu: 'WORK_ATTR',
                         defaultValue: 'id'
                     }
                 }
@@ -224,6 +236,7 @@ class Scratch3CommunityBlocks {
             ],
             menus: {
                 USER_ATTR: ['id', 'nickname', 'head','signtime'],
+                WORK_ATTR: ['id', 'author', 'image','look','like','publish_time','time','update_time','nickname'],
                 d:['大写','小写'],
                 time:['标准','时间戳'],
                 type:['文本']
@@ -236,6 +249,13 @@ class Scratch3CommunityBlocks {
         try {
             d=top.userdetail || userdetail; 
             return d[args.USER_ATTR]
+        } catch (error) {
+            return '';
+        }
+    }
+    getWorkInfo(args, util) {
+        try {
+            return workinfo[args.WORK_ATTR]
         } catch (error) {
             return '';
         }
@@ -308,7 +328,7 @@ class Scratch3CommunityBlocks {
                     resolve('')
                     console.log(error)
                 }
-            },100)
+            },50)
         })
     }
     choice(a) {
@@ -393,7 +413,9 @@ class Scratch3CommunityBlocks {
     isValidUrl(url) {
         //var regex2 = /^((blob)?:(sccode\.52msr\.cn|sccode\.ahy1\.top|music\.163\.com|sccode\.tk)|(\/[^\/]))/;
         try {
-            return ['40code.com','www.40code.com','music.163.com'].indexOf((new URL(url)).host)!=-1;//|| regex2.test(url.toLowerCase());
+            let hosts=(new URL(url)).host.split('.');
+            let domain=hosts.slice(hosts.length-2,hosts.length-0).join('.')
+            return ['40code.com','40code.top','40code.cn','114514.wang','bu40.com'].indexOf(domain)!=-1;//|| regex2.test(url.toLowerCase());
         } catch (error) {
             return 0;
         }
@@ -404,7 +426,7 @@ class Scratch3CommunityBlocks {
         if (this.isValidUrl(args.URL)) {
             window.open(args.URL);
         } else {
-            mdui.alert("该指令块仅可打开40code编程社区、网易云音乐");
+            mdui.alert("该指令块仅可打开40code编程社区");
         }
     }
 
@@ -412,7 +434,7 @@ class Scratch3CommunityBlocks {
         if (this.isValidUrl(args.URL)) {
             window.location = args.URL;
         } else {
-            mdui.alert("该指令块仅可打开40code编程社区、网易云音乐");
+            mdui.alert("该指令块仅可打开40code编程社区");
         }
     }
     say(args, util) {

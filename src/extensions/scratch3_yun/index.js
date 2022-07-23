@@ -54,6 +54,22 @@ class Scratch3yunBlocks {
                             menu: 'm2'
                         }
                     },
+                },
+                {
+                    opcode: 'getlist',
+                    blockType: BlockType.REPORTER,
+                    text: '获取[TEXT]开头的云变量名，来源[m]',
+                    arguments: {
+                        TEXT: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'a'
+                        },
+                        m: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '此作品',
+                            menu: 'm2'
+                        }
+                    },
 
                 },
                 {
@@ -94,11 +110,11 @@ class Scratch3yunBlocks {
                             defaultValue: '此作品',
                             menu: 'm2'
                         }
-                    }
+                    },
                 },
             ],
             menus: {
-                m2: ['此作品']//[/*'此作品',*/'此作者']
+                m2: ['此作品','此作者']
             }
         };
     }
@@ -106,34 +122,6 @@ class Scratch3yunBlocks {
         let isczy;
         temp2.yunrun || (temp2.yunrun=0);
         temp2.s || (temp2.s=setInterval(()=>{temp2.yunrun=0},1000))
-        // if(!temp2.wi){
-        //     temp2.wi=new Promise(resolve => {
-        //         let t;
-        //         if (s.m == '此作品') {
-        //             t=0
-        //         } else if (s.m == '此作者') {
-        //             t=1
-        //         } else {
-        //             resolve('');
-        //         }
-        //         $.ajax({
-        //             method: 'GET',
-        //             url: temp2.apihost+"cloud/load",
-        //             dataType: 'json',
-        //             data: {
-        //                 t:t,
-        //                 id:typeof workinfo==="undefined"?getQueryString('id'):workinfo.id,
-        //                 name:s.TEXT
-        //             },
-        //             success: function (data) {
-        //                 resolve(data.data);
-        //             },
-        //             Error: function () {
-        //                 resolve('');
-        //             }
-        //         });
-        //     }).then(res=>{return res});
-        // }
         try {
             try {
                 workinfo;
@@ -163,21 +151,60 @@ class Scratch3yunBlocks {
             temp2.yunrun++;
             return new Promise(resolve => {
                 let t=0;
-                // if (s.m == '此作品') {
-                //     t=0
-                // } else if (s.m == '此作者') {
-                //     t=1
-                // } else {
-                //     resolve('');
-                // }
+                if (s.m == '此作品') {
+                    t=0
+                } else if (s.m == '此作者') {
+                    t=1
+                } else {
+                    resolve('');
+                }
                 $.ajax({
                     method: 'GET',
                     url: temp2.apihost+"cloud/load",
                     dataType: 'json',
                     data: {
                         t:t,
-                        id:id,
-                        name:s.TEXT
+                        id:t?workinfo.author:id,
+                        name:s.TEXT,
+                        token:getCookie('token')
+                    },
+                    success: function (data) {
+                        resolve(data.data);
+                    },
+                    Error: function () {
+                        resolve('');
+                    }
+                }).then(res=>{console.log(res);return res;});
+            });
+        } else {
+            mdui.snackbar('请求频率过高')
+            return '';
+        }
+    }
+    getlist(s) {
+        if (!this.auth()) {
+            // mdui.snackbar('创作页不可以使用云变量')
+        }
+        if (temp2.yunrun <= 15) {
+            temp2.yunrun++;
+            return new Promise(resolve => {
+                let t=0;
+                if (s.m == '此作品') {
+                    t=0
+                } else if (s.m == '此作者') {
+                    t=1
+                } else {
+                    resolve('');
+                }
+                $.ajax({
+                    method: 'GET',
+                    url: temp2.apihost+"cloud/loadlist",
+                    dataType: 'json',
+                    data: {
+                        t:t,
+                        id:t?workinfo.author:id,
+                        name:s.TEXT,
+                        token:getCookie('token')
                     },
                     success: function (data) {
                         resolve(data.data);
@@ -201,22 +228,23 @@ class Scratch3yunBlocks {
             temp2.yunrun++;
             return new Promise(resolve => {
                 let t=0;
-                // if (s.m == '此作品') {
-                //     t=0
-                // } else if (s.m == '此作者') {
-                //     t=1
-                // } else {
-                //     resolve('');
-                // }
+                if (s.m == '此作品') {
+                    t=0
+                } else if (s.m == '此作者') {
+                    t=1
+                } else {
+                    resolve('');
+                }
                 $.ajax({
                     method: 'POST',
-                    url: temp2.apihost+"cloud/save",
+                    url: temp2.apihost+"cloud/save?token="+getCookie('token'),
                     dataType: 'json',
                     data: {
                         t:t,
-                        id:id,
+                        id:t?workinfo.author:id,
                         name:s.TEXT2,
-                        data:s.TEXT
+                        data:s.TEXT,
+                        token:getCookie('token')
                     },
                     success: function (data) {
                         data.msg && resolve(data.msg);
