@@ -45,9 +45,12 @@ const builtinExtensions = {
     makeymakey: () => require('../extensions/scratch3_makeymakey'),
     boost: () => require('../extensions/scratch3_boost'),
     gdxfor: () => require('../extensions/scratch3_gdx_for'),
+    tc: () => require('../extensions/scratch3_tc'),
     // tw: core extension
     tw: () => require('../extensions/tw')
 };
+
+window.builtinExtensions=builtinExtensions;
 
 /**
  * @typedef {object} ArgumentInfo - Information about an extension block argument

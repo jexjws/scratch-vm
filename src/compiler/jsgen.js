@@ -414,7 +414,41 @@ class JSGenerator {
             return new TypedInput(`toBoolean(p${node.index})`, TYPE_BOOLEAN);
         case 'args.stringNumber':
             return new TypedInput(`p${node.index}`, TYPE_UNKNOWN);
-
+        case 'procedures.return_call': {
+            const procedureCode = node.code;
+            const procedureVariant = node.variant;
+            // Do not generate any code for empty procedures.
+            const procedureData = this.ir.procedures[procedureVariant];
+            let my_source = '';
+            if (procedureData.stack === null) {
+                break;
+            }
+            if (!this.isWarp && procedureCode === this.script.procedureCode) {
+                // Direct recursion yields.
+                this.yieldNotWarp();
+            }
+            if (procedureData.yields) {
+                my_source += 'yield* ';
+                if (!this.script.yields) {
+                    throw new Error('Script uses yielding procedure but is not marked as yielding.');
+                }
+            }
+            my_source += `thread.procedures["${sanitize(procedureVariant)}"](`;
+            // Only include arguments if the procedure accepts any.
+            if (procedureData.arguments.length) {
+                const args = [];
+                for (const input of node.arguments) {
+                    args.push(this.descendInput(input).asSafe());
+                }
+                my_source += args.join(',');
+            }
+            my_source += `)\n`;
+            // Variable input types may have changes after a procedure call.
+            this.resetVariableInputs();
+            console.log("return_call:"+my_source)
+            //this.source += my_source
+            return new TypedInput(my_source, TYPE_STRING);
+        }
         case 'compat':
             // Compatibility layer inputs never use flags.
             return new TypedInput(`(${this.generateCompatibilityLayerCall(node, false)})`, TYPE_UNKNOWN);
@@ -495,6 +529,9 @@ class JSGenerator {
         case 'op.divide':
             // Needs to be marked as NaN because 0 / 0 === NaN
             return new TypedInput(`(${this.descendInput(node.left).asNumber()} / ${this.descendInput(node.right).asNumber()})`, TYPE_NUMBER_NAN);
+        //milk
+        case 'op.power':
+            return new TypedInput(`(${this.descendInput(node.left).asNumber()} ** ${this.descendInput(node.right).asNumber()})`, TYPE_NUMBER_NAN);
         case 'op.equals': {
             const left = this.descendInput(node.left);
             const right = this.descendInput(node.right);
@@ -995,7 +1032,6 @@ class JSGenerator {
         case 'pen.up':
             this.source += `${PEN_EXT}._penUp(target);\n`;
             break;
-
         case 'procedures.call': {
             const procedureCode = node.code;
             const procedureVariant = node.variant;
@@ -1029,6 +1065,16 @@ class JSGenerator {
             break;
         }
 
+
+
+        //milk
+
+
+
+        case 'procedures.return':{
+            this.source += `return ${this.descendInput(node.return).asString()};\n`;
+            break;
+        }
         case 'timer.reset':
             this.source += 'runtime.ioDevices.clock.resetProjectTimer();\n';
             break;
@@ -1055,10 +1101,11 @@ class JSGenerator {
             break;
 
         case 'visualReport': {
-            const value = this.localVariables.next();
-            this.source += `const ${value} = ${this.descendInput(node.input).asUnknown()};`;
-            // blocks like legacy no-ops can return a literal `undefined`
-            this.source += `if (${value} !== undefined) runtime.visualReport("${sanitize(this.script.topBlockId)}", ${value});\n`;
+            const value = this.localVariables.next()
+            try{
+                this.source += `const ${value} = ${this.descendInput(node.input).asUnknown()};`;  
+                this.source += `if(${value} != undefined){runtime.visualReport("${sanitize(this.script.topBlockId)}", ${value});}\n`;              
+            }catch{} 
             break;
         }
 

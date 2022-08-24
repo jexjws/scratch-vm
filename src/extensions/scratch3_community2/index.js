@@ -39,215 +39,245 @@ class Scratch3CommunityBlocks {
         return {
             id: 'community2',
             name: '社区模块',
-            blockIconURI: blockIconURI,
+            // blockIconURI: blockIconURI,
+            color1: '#E91E63',
             blocks: [
-            {
-                opcode: 'getUserInfo',
-                blockType: BlockType.REPORTER,
-                text: '访问者[USER_ATTR]',
-                arguments: {
-                    USER_ATTR: {
-                        type: ArgumentType.STRING,
-                        menu: 'USER_ATTR',
-                        defaultValue: 'id'
+                {
+                    opcode: 'getUserInfo',
+                    blockType: BlockType.REPORTER,
+                    text: '访问者[USER_ATTR]',
+                    arguments: {
+                        USER_ATTR: {
+                            type: ArgumentType.STRING,
+                            menu: 'USER_ATTR',
+                            defaultValue: 'id'
+                        }
                     }
-                }
-            },
-            {
-                opcode: 'getWorkInfo',
-                blockType: BlockType.REPORTER,
-                text: '作品[WORK_ATTR]',
-                arguments: {
-                    WORK_ATTR: {
-                        type: ArgumentType.STRING,
-                        menu: 'WORK_ATTR',
-                        defaultValue: 'id'
+                },
+                {
+                    opcode: 'getWorkInfo',
+                    blockType: BlockType.REPORTER,
+                    text: '作品[WORK_ATTR]',
+                    arguments: {
+                        WORK_ATTR: {
+                            type: ArgumentType.STRING,
+                            menu: 'WORK_ATTR',
+                            defaultValue: 'id'
+                        }
                     }
-                }
-            },
-            {
-                opcode: 'openUrl',
-                blockType: BlockType.COMMAND,
-                text: '打开 [URL]',
-                arguments: {
-                    URL: {
-                        type: ArgumentType.STRING,
-                        defaultValue: 'http://40code.com'
+                },
+                {
+                    opcode: 'openUrl',
+                    blockType: BlockType.COMMAND,
+                    text: '打开 [URL]',
+                    arguments: {
+                        URL: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'http://40code.com'
+                        }
                     }
-                }
-            },
-            {
-                opcode: 'redirectUrl',
-                blockType: BlockType.COMMAND,
-                text: '重定向 [URL]',
-                arguments: {
-                    URL: {
-                        type: ArgumentType.STRING,
-                        defaultValue: 'http://40code.com'
+                },
+                {
+                    opcode: 'redirectUrl',
+                    blockType: BlockType.COMMAND,
+                    text: '重定向 [URL]',
+                    arguments: {
+                        URL: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'http://40code.com'
+                        }
                     }
-                }
-            },
-            {
-                opcode: 'getBrowserName',
-                blockType: BlockType.REPORTER,
-                text: '获取浏览器信息',
-            },
-            {
-                opcode: 'ale',
-                blockType: BlockType.COMMAND,
-                text: '弹窗 [TEXT] [title]',
-                arguments: {
-                    TEXT: {
-                        type: ArgumentType.STRING,
-                        defaultValue: '弹窗内容'
-                    },
-                    title:{
-                        type: ArgumentType.STRING,
-                        defaultValue: '标题'
+                },
+                {
+                    opcode: 'getBrowserName',
+                    blockType: BlockType.REPORTER,
+                    text: '获取浏览器信息',
+                },
+                {
+                    opcode: 'ale',
+                    blockType: BlockType.COMMAND,
+                    text: '弹窗 [TEXT] [title]',
+                    arguments: {
+                        TEXT: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '弹窗内容'
+                        },
+                        title: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '标题'
+                        }
                     }
-                }
-            },
-            {
-                opcode: 'aleAndWait',
-                blockType: BlockType.COMMAND,
-                text: '弹窗 [TEXT] [title] 并等待',
-                arguments: {
-                    TEXT: {
-                        type: ArgumentType.STRING,
-                        defaultValue: '弹窗内容'
-                    },
-                    title:{
-                        type: ArgumentType.STRING,
-                        defaultValue: '标题'
+                },
+                {
+                    opcode: 'aleAndWait',
+                    blockType: BlockType.COMMAND,
+                    text: '弹窗 [TEXT] [title] 并等待',
+                    arguments: {
+                        TEXT: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '弹窗内容'
+                        },
+                        title: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '标题'
+                        }
                     }
-                }
-            },
-            {
-                opcode: 'choice',
-                blockType: BlockType.REPORTER,
-                text: '返回 选择框 [TEXT] [title] [a] [b] 并等待',
-                arguments: {
-                    TEXT: {
-                        type: ArgumentType.STRING,
-                        defaultValue: '内容'
-                    },
-                    title:{
-                        type: ArgumentType.STRING,
-                        defaultValue: '标题'
-                    },
-                    a: {
-                        type: ArgumentType.STRING,
-                        defaultValue: '确定'
-                    },
-                    b:{
-                        type: ArgumentType.STRING,
-                        defaultValue: '取消'
+                },
+                {
+                    opcode: 'choice',
+                    blockType: BlockType.REPORTER,
+                    text: '返回 选择框 [TEXT] [title] [a] [b] 并等待',
+                    arguments: {
+                        TEXT: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '内容'
+                        },
+                        title: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '标题'
+                        },
+                        a: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '确定'
+                        },
+                        b: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '取消'
+                        }
                     }
-                }
-            },
-            {
-                opcode: 'al2',
-                blockType: BlockType.COMMAND,
-                text: 'snackbar[TEXT]',
-                arguments: {
-                    TEXT: {
-                        type: ArgumentType.STRING,
-                        defaultValue: '弹窗内容'
+                },
+                {
+                    opcode: 'al2',
+                    blockType: BlockType.COMMAND,
+                    text: 'snackbar[TEXT]',
+                    arguments: {
+                        TEXT: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '弹窗内容'
+                        }
                     }
-                }
-            },
-            {
-                opcode: 'jt',
-                blockType: BlockType.REPORTER,
-                text: '获取截图(base64)',
-            },
-            {
-                opcode: 'tob',
-                blockType: BlockType.REPORTER,
-                text: 'base64转换成blob[x]',
-                arguments: {
-                    x: {
-                        type: ArgumentType.STRING,
-                        defaultValue: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAIAAAC0Ujn1AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD3SURBVEhL7ZQxCkIxDEA9iJtOOun2Ny/h5A2cXB28hYNnEDyDeCD/B1H5OPwaSCglbdLWIqj4yFDa9KX8tL9n3sZPqh/HU1PNzv1hMGCp3R8o1UNTg7ceTZmORT0YU7aHqE7xYtAGD1HdTCq7+bbe0KzDfbuTlhBRrXtTiKuVRumIaugPqmHwml1U46e0od+zIKIaYPbcApoa8O0QiQUiasQvoLwUS5IaYQWiB89QI+7NoSmBbLV7dpoSyFYDn6qG395lvpAaVaS2vz12hWEMM0Vqew2UuC5XlC0QVgcfoRvg7dqWsgW0NgYLpEgRTV3IX834RrUxT9CBgC1z1P22AAAAAElFTkSuQmCC'
+                },
+                {
+                    opcode: 'jt',
+                    blockType: BlockType.REPORTER,
+                    text: '获取截图(base64)',
+                },
+                {
+                    opcode: 'tob',
+                    blockType: BlockType.REPORTER,
+                    text: 'base64转换成blob[x]',
+                    arguments: {
+                        x: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAIAAAC0Ujn1AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD3SURBVEhL7ZQxCkIxDEA9iJtOOun2Ny/h5A2cXB28hYNnEDyDeCD/B1H5OPwaSCglbdLWIqj4yFDa9KX8tL9n3sZPqh/HU1PNzv1hMGCp3R8o1UNTg7ceTZmORT0YU7aHqE7xYtAGD1HdTCq7+bbe0KzDfbuTlhBRrXtTiKuVRumIaugPqmHwml1U46e0od+zIKIaYPbcApoa8O0QiQUiasQvoLwUS5IaYQWiB89QI+7NoSmBbLV7dpoSyFYDn6qG395lvpAaVaS2vz12hWEMM0Vqew2UuC5XlC0QVgcfoRvg7dqWsgW0NgYLpEgRTV3IX834RrUxT9CBgC1z1P22AAAAAElFTkSuQmCC'
+                        }
                     }
-                }
-            },
-            {
-                opcode: 'copy',
-                blockType: BlockType.COMMAND,
-                text: '复制[t]到剪贴板',
-                arguments: {
-                    t: {
-                        type: ArgumentType.STRING,
-                        defaultValue: '114514',
+                },
+                {
+                    opcode: 'copy',
+                    blockType: BlockType.COMMAND,
+                    text: '复制[t]到剪贴板',
+                    arguments: {
+                        t: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '114514',
+                        }
                     }
-                }
-            },
-            {
-                opcode: 'dl',
-                blockType: BlockType.COMMAND,
-                text: '下载文件名[n]，内容[t]',
-                arguments: {
-                    t: {
-                        type: ArgumentType.STRING,
-                        defaultValue: '114514',
-                    },
-                    n: {
-                        type: ArgumentType.STRING,
-                        defaultValue: '114514.txt',
+                },
+                {
+                    opcode: 'dl',
+                    blockType: BlockType.COMMAND,
+                    text: '下载文件名[n]，内容[t]',
+                    arguments: {
+                        t: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '114514',
+                        },
+                        n: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '114514.txt',
+                        }
                     }
-                }
-            },
-            {
-                opcode: 'sj',
-                blockType: BlockType.REPORTER,
-                text: '获取时间[x]',
-                arguments: {
-                    x: {
-                        type: ArgumentType.STRING,
-                        defaultValue: '标准',
-                        menu:'time'
+                },
+                {
+                    opcode: 'sj',
+                    blockType: BlockType.REPORTER,
+                    text: '获取时间[x]',
+                    arguments: {
+                        x: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '标准',
+                            menu: 'time'
+                        }
                     }
-                }
-            },
-            {
-                opcode: 'upload',
-                blockType: BlockType.REPORTER,
-                text: '上传文件并获取文件内容，类型[type]',
-                arguments: {
-                    type: {
-                        type: ArgumentType.STRING,
-                        defaultValue: '文本',
-                        menu:'type'
+                },
+                {
+                    opcode: 'upload',
+                    blockType: BlockType.REPORTER,
+                    text: '上传文件并获取文件内容，类型[type]',
+                    arguments: {
+                        type: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '文本',
+                            menu: 'type'
+                        }
                     }
-                }
-            },
-            {
-                opcode: 'setIntroduction',
-                blockType: BlockType.COMMAND,
-                text: '修改作品介绍[text]',
-                arguments: {
-                    text: {
-                        type: ArgumentType.STRING,
-                        defaultValue: '# 此介绍已被修改'
+                },
+                {
+                    opcode: 'setIntroduction',
+                    blockType: BlockType.COMMAND,
+                    text: '修改作品介绍[text]',
+                    arguments: {
+                        text: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '# 此介绍已被修改'
+                        }
                     }
-                }
-            },
+                },
+                {
+                    opcode: 'geth',
+                    blockType: BlockType.REPORTER,
+                    text: '播放器高度',
+                    arguments: {
+                    }
+                },
+                {
+                    opcode: 'getw',
+                    blockType: BlockType.REPORTER,
+                    text: '播放器宽度',
+                    arguments: {
+                    }
+                },
             ],
             menus: {
-                USER_ATTR: ['id', 'nickname', 'head','signtime'],
-                WORK_ATTR: ['id', 'author', 'image','look','like','publish_time','time','update_time','nickname'],
-                d:['大写','小写'],
-                time:['标准','时间戳'],
-                type:['文本']
+                USER_ATTR: ['id', 'nickname', 'head', 'signtime'],
+                WORK_ATTR: ['id', 'author', 'image', 'look', 'like', 'publish_time', 'time', 'update_time', 'nickname'],
+                d: ['大写', '小写'],
+                time: ['标准', '时间戳'],
+                type: ['文本']
             }
         };
     }
-
+    geth() {
+        try {
+            let c = $('.stage_stage_DTWo5')[0].children[0].children[0]// ||  $('.stage_dragging-sprite_2rRMx')[0] 
+            return c.height;
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    getw() {
+        try {
+            let c =  $('.stage_stage_DTWo5')[0].children[0].children[0]//$('.stage_dragging-sprite_2rRMx')[0] ||
+            return c.width;
+        } catch (e) {
+            console.log(e)
+        }
+    }
     getUserInfo(args, util) {
         let d;
         try {
-            d=top.userdetail || userdetail; 
+            d = top.userdetail || userdetail;
             return d[args.USER_ATTR]
         } catch (error) {
             return '';
@@ -272,126 +302,126 @@ class Scratch3CommunityBlocks {
             return !!(Blockey.INIT_DATA.userProject && Blockey.INIT_DATA.userProject.isLoved);
         }
     */
-    _math(a){
-        let b=a;
+    _math(a) {
+        let b = a;
         const replaceStr2 = (str, index, char, t) => {
             return str.substring(0, index) + char + str.substring(index - t);
         }
-        for(let i=0;i<b.length;i++){
-            if(b[i] && ((b[i].charCodeAt()>=97 && b[i].charCodeAt()<=122) || (b[i].charCodeAt()>=65 && b[i].charCodeAt()<=90))){
-                b=replaceStr2(b,i,'Math.',0);
-                i+=5;
-                for(;(b[i] && ((b[i].charCodeAt()>=97 && b[i].charCodeAt()<=122) || (b[i].charCodeAt()>=65 && b[i].charCodeAt()<=90)) && i<b.length);i++);
+        for (let i = 0; i < b.length; i++) {
+            if (b[i] && ((b[i].charCodeAt() >= 97 && b[i].charCodeAt() <= 122) || (b[i].charCodeAt() >= 65 && b[i].charCodeAt() <= 90))) {
+                b = replaceStr2(b, i, 'Math.', 0);
+                i += 5;
+                for (; (b[i] && ((b[i].charCodeAt() >= 97 && b[i].charCodeAt() <= 122) || (b[i].charCodeAt() >= 65 && b[i].charCodeAt() <= 90)) && i < b.length); i++);
             }
         }
         return b;
     }
     ale(url) {
-        mdui.alert(markdownToHtml(url.TEXT),markdownToHtml(url.title) || '');
+        mdui.alert(markdownToHtml(url.TEXT), markdownToHtml(url.title) || '');
     }
     aleAndWait(url) {
-        return new Promise((resolve)=>{
-            mdui.alert(markdownToHtml(url.TEXT),markdownToHtml(url.title) || '',()=>{
+        return new Promise((resolve) => {
+            mdui.alert(markdownToHtml(url.TEXT), markdownToHtml(url.title) || '', () => {
                 resolve()
             });
         })
     }
     upload(url) {
-        return new Promise((resolve)=>{
-            var d=mdui.dialog({
+        return new Promise((resolve) => {
+            var d = mdui.dialog({
                 title: '请选择文件',
                 content: '<input type="file" class="uploadfile" accept=".txt" />',
                 buttons: [
-                  {
-                    text: '取消',
-                    onClick: function(inst){
-                       resolve('')
-                      }
-                  },
+                    {
+                        text: '取消',
+                        onClick: function (inst) {
+                            resolve('')
+                        }
+                    },
                 ]
-              });
-            var int=setInterval(()=>{
-                var f=$('.uploadfile');
-                if(!f[f.length-1].files.length) return;
+            });
+            var int = setInterval(() => {
+                var f = $('.uploadfile');
+                if (!f[f.length - 1].files.length) return;
                 var reader = new FileReader();//新建⼀个FileReader
                 clearInterval(int)
                 d.close();
                 try {
-                    reader.readAsText(f[f.length-1].files[0], "UTF-8")
-                    reader.onload = function(evt){ //读取完⽂件之后会回来这⾥
+                    reader.readAsText(f[f.length - 1].files[0], "UTF-8")
+                    reader.onload = function (evt) { //读取完⽂件之后会回来这⾥
                         var fileString = evt.target.result; // 读取⽂件内容
                         console.log(fileString)
                         resolve(fileString)
                     }
-                    
+
                 } catch (error) {
                     resolve('')
                     console.log(error)
                 }
-            },50)
+            }, 50)
         })
     }
     choice(a) {
-        return new Promise((resolve)=>{
+        return new Promise((resolve) => {
             mdui.dialog({
                 title: markdownToHtml(a.title),
                 content: markdownToHtml(a.TEXT),
                 buttons: [
-                  {
-                    text: a.a,
-                    onClick: function(inst){
-                       resolve(a.a)
-                      }
-                  },
-                  {
-                    text: a.b,
-                    onClick: function(inst){
-                        resolve(a.b)
+                    {
+                        text: a.a,
+                        onClick: function (inst) {
+                            resolve(a.a)
+                        }
+                    },
+                    {
+                        text: a.b,
+                        onClick: function (inst) {
+                            resolve(a.b)
+                        }
                     }
-                  }
                 ]
-              });
+            });
         })
     }
     al2(url) {
         mdui.snackbar(markdownToHtml(url.TEXT));
     }
     js(url) {
-        try{
+        try {
             return eval(this._math(url.TEXT));
-        }catch(e){
+        } catch (e) {
             return e;
         }
-        
+
     }
     jq(url) {
-        try{
-            let a,b;
-            if(url.a>0)
-                a=url.a-1;
-            if(url.b>0)
-                b=url.b-1;
-            return url.TEXT.toString().substring(a,b);
-        }catch(e){
+        try {
+            let a, b;
+            if (url.a > 0)
+                a = url.a - 1;
+            if (url.b > 0)
+                b = url.b - 1;
+            return url.TEXT.toString().substring(a, b);
+        } catch (e) {
             return e;
         }
-        
+
     }
     czs(url) {
-        try{
-            return url.TEXT.indexOf(url.a,url.b-1)+1;
-        }catch(e){
+        try {
+            return url.TEXT.indexOf(url.a, url.b - 1) + 1;
+        } catch (e) {
             return e;
         }
-        
+
     }
     cze(url) {
-        try{
-            return url.TEXT.lastIndexOf(url.a,url.b-1)+1;
-        }catch(e){
+        try {
+            return url.TEXT.lastIndexOf(url.a, url.b - 1) + 1;
+        } catch (e) {
             return e;
         }
-        
+
     }
     jl(a) {
         return Math.sqrt((a.x1 - a.x2) * (a.x1 - a.x2) + (a.y1 - a.y2) * (a.y1 - a.y2));
@@ -413,13 +443,13 @@ class Scratch3CommunityBlocks {
     isValidUrl(url) {
         //var regex2 = /^((blob)?:(sccode\.52msr\.cn|sccode\.ahy1\.top|music\.163\.com|sccode\.tk)|(\/[^\/]))/;
         try {
-            let hosts=(new URL(url)).host.split('.');
-            let domain=hosts.slice(hosts.length-2,hosts.length-0).join('.')
-            return ['40code.com','40code.top','40code.cn','114514.wang','bu40.com'].indexOf(domain)!=-1;//|| regex2.test(url.toLowerCase());
+            let hosts = (new URL(url)).host.split('.');
+            let domain = hosts.slice(hosts.length - 2, hosts.length - 0).join('.')
+            return ['40code.com', '40code.top', '40code.cn', '114514.wang', 'bu40.com'].indexOf(domain) != -1 || url.startsWith('blob:');//|| regex2.test(url.toLowerCase());
         } catch (error) {
             return 0;
         }
-        
+
     }
 
     openUrl(args, util) {
@@ -459,7 +489,7 @@ class Scratch3CommunityBlocks {
     }
     yunload(s) {
         mdui.snackbar("当前云数据已废弃");
-       
+
 
     }
     yunsave(args) {
@@ -470,20 +500,20 @@ class Scratch3CommunityBlocks {
         function encodeUTF8(s) {
             var i, r = [], c, x;
             for (i = 0; i < s.length; i++)
-              if ((c = s.charCodeAt(i)) < 0x80) r.push(c);
-              else if (c < 0x800) r.push(0xC0 + (c >> 6 & 0x1F), 0x80 + (c & 0x3F));
-              else {
-                if ((x = c ^ 0xD800) >> 10 == 0) //对四字节UTF-16转换为Unicode
-                  c = (x << 10) + (s.charCodeAt(++i) ^ 0xDC00) + 0x10000,
-                    r.push(0xF0 + (c >> 18 & 0x7), 0x80 + (c >> 12 & 0x3F));
-                else r.push(0xE0 + (c >> 12 & 0xF));
-                r.push(0x80 + (c >> 6 & 0x3F), 0x80 + (c & 0x3F));
-              };
+                if ((c = s.charCodeAt(i)) < 0x80) r.push(c);
+                else if (c < 0x800) r.push(0xC0 + (c >> 6 & 0x1F), 0x80 + (c & 0x3F));
+                else {
+                    if ((x = c ^ 0xD800) >> 10 == 0) //对四字节UTF-16转换为Unicode
+                        c = (x << 10) + (s.charCodeAt(++i) ^ 0xDC00) + 0x10000,
+                            r.push(0xF0 + (c >> 18 & 0x7), 0x80 + (c >> 12 & 0x3F));
+                    else r.push(0xE0 + (c >> 12 & 0xF));
+                    r.push(0x80 + (c >> 6 & 0x3F), 0x80 + (c & 0x3F));
+                };
             return r;
-          }
-          
-          // 字符串加密成 hex 字符串
-          function sha1(s) {
+        }
+
+        // 字符串加密成 hex 字符串
+        function sha1(s) {
             var data = new Uint8Array(encodeUTF8(s))
             var i, j, t;
             var l = ((data.length + 8) >>> 6 << 4) + 16, s = new Uint8Array(l << 2);
@@ -492,78 +522,78 @@ class Scratch3CommunityBlocks {
             s[data.length >> 2] |= 0x80 << (24 - (data.length & 3) * 8);
             s[l - 1] = data.length << 3;
             var w = [], f = [
-              function () { return m[1] & m[2] | ~m[1] & m[3]; },
-              function () { return m[1] ^ m[2] ^ m[3]; },
-              function () { return m[1] & m[2] | m[1] & m[3] | m[2] & m[3]; },
-              function () { return m[1] ^ m[2] ^ m[3]; }
+                function () { return m[1] & m[2] | ~m[1] & m[3]; },
+                function () { return m[1] ^ m[2] ^ m[3]; },
+                function () { return m[1] & m[2] | m[1] & m[3] | m[2] & m[3]; },
+                function () { return m[1] ^ m[2] ^ m[3]; }
             ], rol = function (n, c) { return n << c | n >>> (32 - c); },
-              k = [1518500249, 1859775393, -1894007588, -899497514],
-              m = [1732584193, -271733879, null, null, -1009589776];
+                k = [1518500249, 1859775393, -1894007588, -899497514],
+                m = [1732584193, -271733879, null, null, -1009589776];
             m[2] = ~m[0], m[3] = ~m[1];
             for (i = 0; i < s.length; i += 16) {
-              var o = m.slice(0);
-              for (j = 0; j < 80; j++)
-                w[j] = j < 16 ? s[i + j] : rol(w[j - 3] ^ w[j - 8] ^ w[j - 14] ^ w[j - 16], 1),
-                  t = rol(m[0], 5) + f[j / 20 | 0]() + m[4] + w[j] + k[j / 20 | 0] | 0,
-                  m[1] = rol(m[1], 30), m.pop(), m.unshift(t);
-              for (j = 0; j < 5; j++)m[j] = m[j] + o[j] | 0;
+                var o = m.slice(0);
+                for (j = 0; j < 80; j++)
+                    w[j] = j < 16 ? s[i + j] : rol(w[j - 3] ^ w[j - 8] ^ w[j - 14] ^ w[j - 16], 1),
+                        t = rol(m[0], 5) + f[j / 20 | 0]() + m[4] + w[j] + k[j / 20 | 0] | 0,
+                        m[1] = rol(m[1], 30), m.pop(), m.unshift(t);
+                for (j = 0; j < 5; j++)m[j] = m[j] + o[j] | 0;
             };
             t = new DataView(new Uint32Array(m).buffer);
             for (var i = 0; i < 5; i++)m[i] = t.getUint32(i << 2);
-          
+
             var hex = Array.prototype.map.call(new Uint8Array(new Uint32Array(m).buffer), function (e) {
-              return (e < 16 ? "0" : "") + e.toString(16);
+                return (e < 16 ? "0" : "") + e.toString(16);
             }).join("");
             return hex;
-          }
-          return sha1(ss.c);
+        }
+        return sha1(ss.c);
     }
-    jt(a){
+    jt(a) {
         let sss;
         window.scratch.getProjectCover(cover => {
-            sss= cover;
-          })
+            sss = cover;
+        })
         return sss;
     }
     tob(a) {
-        try{
+        try {
             return URL.createObjectURL(dataURLToBlob(a.x));
-        }catch(e){
+        } catch (e) {
             return e;
         }
     }
     dx(a) {
-        try{
-            if(a.x=='大写')
-            return a.a.toUpperCase();
-            if(a.x=='小写')
-            return a.a.toLowerCase();
-        }catch(e){
+        try {
+            if (a.x == '大写')
+                return a.a.toUpperCase();
+            if (a.x == '小写')
+                return a.a.toLowerCase();
+        } catch (e) {
             return e;
         }
     }
     zz(a) {
-        try{
-            let v=a.b;
-            if(v[0]!='/')
-            v='/'+v;
+        try {
+            let v = a.b;
+            if (v[0] != '/')
+                v = '/' + v;
             return a.a.search(eval(v));
-        }catch(e){
+        } catch (e) {
             return e;
         }
     }
     zz2(a) {
-        try{
-            let v=a.b;
-            if(v[0]!='/')
-            v='/'+v;
-            return a.a.replace(eval(v),a.c);
-        }catch(e){
+        try {
+            let v = a.b;
+            if (v[0] != '/')
+                v = '/' + v;
+            return a.a.replace(eval(v), a.c);
+        } catch (e) {
             return e;
         }
     }
-    copy(a){
-        function copyText(text, callback){ // text: 要复制的内容， callback: 回调
+    copy(a) {
+        function copyText(text, callback) { // text: 要复制的内容， callback: 回调
             var tag = document.createElement('input');
             tag.setAttribute('id', 'cp_hgz_input');
             tag.value = text;
@@ -571,42 +601,42 @@ class Scratch3CommunityBlocks {
             document.getElementById('cp_hgz_input').select();
             document.execCommand('copy');
             document.getElementById('cp_hgz_input').remove();
-            if(callback) {callback(text)}
+            if (callback) { callback(text) }
         }
-        copyText( a.t, function (){console.log('复制成功')});
+        copyText(a.t, function () { console.log('复制成功') });
     }
-    dl(a){
+    dl(a) {
         function download(filename, text) {
             var pom = document.createElement("a");
             pom.setAttribute(
                 "href",
                 "data:text/plain;charset=utf-8," + encodeURIComponent(text)
-              );
-              pom.setAttribute("download", filename);
-              if (document.createEvent) {
+            );
+            pom.setAttribute("download", filename);
+            if (document.createEvent) {
                 var event = document.createEvent("MouseEvents");
                 event.initEvent("click", true, true);
                 pom.dispatchEvent(event);
-              } else {
+            } else {
                 pom.click();
-              }
+            }
         }
-        download(a.n,a.t);
+        download(a.n, a.t);
     }
-    sj(a){
-        if(a.x=="标准")
-        return (new  Date()).toString();
+    sj(a) {
+        if (a.x == "标准")
+            return (new Date()).toString();
         else
-        return (new Date()).valueOf().toString();
+            return (new Date()).valueOf().toString();
     }
-    cf(a){
-        return a.b.split(a.a)[a.c-1];
+    cf(a) {
+        return a.b.split(a.a)[a.c - 1];
     }
-    setIntroduction(a){
-        try{
-            top.v.workview.introduce2=top.markdownToHtml(a.text.slice(0,1000))
-        }catch(e){
-            mdui.snackbar("修改介绍(创作页提示)："+markdownToHtml(a.text))
+    setIntroduction(a) {
+        try {
+            top.v.workview.introduce2 = top.markdownToHtml(a.text.slice(0, 1000))
+        } catch (e) {
+            mdui.snackbar("修改介绍(创作页提示)：" + markdownToHtml(a.text))
             console.log(e)
         }
     }

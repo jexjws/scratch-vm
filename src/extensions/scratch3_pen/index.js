@@ -138,6 +138,10 @@ class Scratch3PenBlocks {
      * @private
      */
     _getPenLayerID () {
+        if(vm.runtime.ext_canvas && vm.runtime.ext_canvas._penSkinId>=0){
+            this._penSkinId = vm.runtime.ext_canvas._penSkinId;
+            this._penDrawableId = vm.runtime.ext_canvas._penDrawableId;
+        }
         if (this._penSkinId < 0 && this.runtime.renderer) {
             this._penSkinId = this.runtime.renderer.createPenSkin();
             this._penDrawableId = this.runtime.renderer.createDrawable(StageLayering.PEN_LAYER);
@@ -534,6 +538,12 @@ class Scratch3PenBlocks {
             this.runtime.renderer.penClear(penSkinId);
             this.runtime.requestRedraw();
         }
+        // try {
+        //     this.runtime.renderer.penClear(vm.runtime.ext_canvas._penSkinId);
+        //     this.runtime.requestRedraw();
+        // } catch (error) {
+        //     console.log(error)
+        // }
     }
 
     /**

@@ -36,8 +36,8 @@ class Scratch3JsonBlocks {
         return {
             id: 'jsonfetch',
             name: 'js扩展',
-            blockIconURI: blockIconURI,
-            menuIconURI: menuIconURI,
+            // blockIconURI: blockIconURI,
+            // menuIconURI: menuIconURI,
             blocks: [
                 {
                     opcode: 'sb',
@@ -158,7 +158,7 @@ class Scratch3JsonBlocks {
                 {
                     opcode: 'setBody',
                     blockType: BlockType.COMMAND,
-                    text: '设置post请求body[body]',
+                    text: '设置请求body[body]',
                     arguments: {
                         body: {
                             type: ArgumentType.STRING,
@@ -211,9 +211,35 @@ class Scratch3JsonBlocks {
                       
                     }
                 },
+                {
+                    opcode: 'setv',
+                    blockType: BlockType.COMMAND,
+                    text: '设置局部变量[a]的值为[b]',
+                    arguments: {
+                        a: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'i'
+                        },
+                        b: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '0'
+                        },
+                    }
+                },
+                {
+                    opcode: 'getv',
+                    blockType: BlockType.REPORTER,
+                    text: '获取局部变量[a]的值',
+                    arguments: {
+                        a: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'i'
+                        },
+                    }
+                }
             ],
             menus: {
-                method:['GET','POST', 'PUT', 'DELETE'],
+                method:['GET','POST', 'PUT', 'DELETE','OPTIONS','HEAD','TRACE','CONNECT'],
                 m:['error','result','status']
                 /*urlNames: {
                     acceptReporters: true,
@@ -265,37 +291,65 @@ class Scratch3JsonBlocks {
     }
     fetchAndWait(a){
         this._f()
-        try {
-            if(['40code.com','www.40code.com','service-dq726wx5-1302921490.sh.apigw.tencentcs.com'].indexOf((new URL(a.url)).host)!=-1){
-                temp2.fetch.error='出于安全性考虑，此接口暂不可请求';
-                return '';
-            }
-        } catch (error) {
-            console.log(error)
-            temp2.fetch.error='出于安全性考虑，此接口暂不可请求';
-            return '';
-        }
+        var that=this;
         
         return new Promise(async resolve=>{
-            fetch(a.url,{
-                method: a.method,
-                headers: temp2.fetch.Headers,
-                referrerPolicy: 'no-referrer', 
-                body: temp2.fetch.body
-            })
-            .then(d=>{
-                temp2.fetch.status=d.status
-                return d.text();
-            })
-            .then(res=>{
-                temp2.fetch.error=''
-                resolve(temp2.fetch.res=res)
-            })
-            .catch(e=>{
-                console.log(e);
-                temp2.fetch.error=e
-                resolve('')
-            })
+            function request(){
+                temp2.fetch.status=""
+                fetch(a.url,{
+                    method: a.method,
+                    headers: temp2.fetch.Headers,
+                    referrerPolicy: 'no-referrer', 
+                    body: a.method=='GET' || a.method=='HEAD' ? undefined : temp2.fetch.body
+                })
+                .then(d=>{
+                    temp2.fetch.status=d.status
+                    return d.text();
+                })
+                .then(res=>{
+                    // temp2.fetch.status=""
+                    temp2.fetch.error=''
+                    resolve(temp2.fetch.res=res)
+                })
+                .catch(e=>{
+                    console.log(e);
+                    temp2.fetch.res=""
+                    // temp2.fetch.status=""
+                    temp2.fetch.error=e
+                    resolve('')
+                })
+            }
+            var getList=()=>{
+                try {
+                    console.log(this.writeList)
+                    if(this.writeList){
+                        if(this.writeList.indexOf((new URL(a.url)).host)==-1){
+                            temp2.fetch.error='出于安全性考虑，此接口暂不可请求';
+                            resolve('错误：详见error模块');
+                            return;
+                        }
+                        request();
+                    }else{
+                        fetch(apihost+'work/urllist')
+                        .then(d=>d.json())
+                        .then(d=>{
+                            that.writeList=d
+                            getList()
+                        })
+                        .catch(e=>{
+                            temp2.fetch.res=""
+                            temp2.fetch.status=""
+                            temp2.fetch.error=e
+                            resolve('错误：详见error模块')
+                        })
+                    }
+                } catch (error) {
+                    console.log(error)
+                    temp2.fetch.error='出于安全性考虑，此接口暂不可请求';
+                    resolve('错误：详见error模块');
+                }
+            }
+            getList();
         })
     }
     res(a){
@@ -363,6 +417,16 @@ class Scratch3JsonBlocks {
         }catch(e){
             return '';
         }
+    }
+    setv({a,b},util){
+        console.log(util.thread)
+        util.thread.values || (util.thread.values={});
+        util.thread.values.a=b
+    }
+    getv({a,b},util){
+        console.log(util.thread)
+        util.thread.values || (util.thread.values={});
+        return util.thread.values.a
     }
 }
 

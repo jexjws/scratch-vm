@@ -47,8 +47,25 @@ class Scratch3CanvasBlocks {
         return {
             id: 'canvas',
             name: 'Canvas',
-            blockIconURI: blockIconURI,
-            blocks: [{
+            // blockIconURI: blockIconURI,
+            color1:'#2196F3',
+            blocks: [
+                {
+                    opcode: 'reset',
+                    blockType: BlockType.COMMAND,
+                    text: '以宽[w]，高[h]重置canvas',
+                    arguments: {
+                        w: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '480'
+                        },
+                        h: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '360'
+                        }
+                    }
+                },
+                {
                     opcode: 'beginPath',
                     blockType: BlockType.COMMAND,
                     text: 'beginPath(绘制路径)',
@@ -643,6 +660,30 @@ class Scratch3CanvasBlocks {
                     }
                 },
                 {
+                    opcode: 'stampTo',
+                    blockType: BlockType.REPORTER,
+                    text: '将canvas转换为base64',
+                    disableMonitor: true,
+                    arguments: {
+                        ox: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        },
+                        oy: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        },
+                        ox2: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '480'
+                        },
+                        oy2: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '360'
+                        }
+                    }
+                },
+                {
                     opcode: 'setLineDash',
                     blockType: BlockType.COMMAND,
                     text: 'setLineDash([c1],[c])',
@@ -883,14 +924,24 @@ class Scratch3CanvasBlocks {
         };
     }
 
-    _createCanvas() {
-        var penSkinId = vm.runtime.ext_pen._penSkinId;
+    _createCanvas(w,h) {
+        if(vm.runtime.ext_pen && vm.runtime.ext_pen._penSkinId>=0){
+            this._penSkinId = vm.runtime.ext_pen._penSkinId;
+            this._penDrawableId = vm.runtime.ext_pen._penDrawableId;
+        }
+        if (this._penSkinId < 0 && this.runtime.renderer) {
+            this._penSkinId = this.runtime.renderer.createPenSkin();
+            this._penDrawableId = this.runtime.renderer.createDrawable(StageLayering.PEN_LAYER);
+            this.runtime.renderer.updateDrawableSkinId(this._penDrawableId, this._penSkinId);
+        }
+        if(this._penSkinId)
+        var penSkinId = this._penSkinId;
         this.runtime.penSkinId = penSkinId;
         if (penSkinId == undefined) return null;
         var penSkin = this.runtime.renderer._allSkins[penSkinId];
         var size = penSkin.size;
-        var w = size[0];
-        var h = size[1];
+        var w = w || size[0];
+        var h = h || size[1];
         var tmpCanvas = document.createElement("canvas");
         tmpCanvas.width = w;
         tmpCanvas.height = h;
@@ -901,11 +952,11 @@ class Scratch3CanvasBlocks {
         };
     }
 
-    _getContext(idx) {
-        if (!this._ctx) {
+    _getContext(idx,w,h) {
+        if (!this._ctx || w || h) {
             this._canvasList = [];
             for (var i = 0; i < 8; i++) this._canvasList.push(null);
-            var tmpCanvas = this._createCanvas();
+            var tmpCanvas = this._createCanvas(w,h);
             if (!tmpCanvas) return null;
             this._canvasList[0] = tmpCanvas;
             this._canvas = tmpCanvas.canvas;
@@ -927,6 +978,10 @@ class Scratch3CanvasBlocks {
             this._ctx = tmpCanvas.ctx;
         }
         return this._ctx;
+    }
+
+    reset({w,h}){
+        const ctx = this._getContext(w,h);
     }
 
     beginPath() {
@@ -1400,6 +1455,16 @@ class Scratch3CanvasBlocks {
         skin._setTexture(imageData);
         this.runtime.renderer.penStamp(this.runtime.penSkinId, this._drawableId);
         this.runtime.requestRedraw();
+    }
+
+    stampTo({ox,oy,ox2,oy2}) {
+        const ctx = this._getContext();
+        if (!ctx) return;
+        // let d=new Date;
+        // var imageData = ctx.getImageData(ox, oy,ox2,oy2);
+        // console.log(imageData,d)
+        // return this._canvasList && this._canvasList[0] && this._canvasList[0].canvas && this._canvasList[0].canvas.toDataURL("image/png", 1);;
+        return this._canvas && this._canvas.toDataURL("image/png", 1);
     }
 
     setLineDash(a) {

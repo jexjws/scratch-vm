@@ -39,7 +39,8 @@ class Scratch3CommunityBlocks {
         return {
             id: 'yx',
             name: '运算',
-            blockIconURI: blockIconURI,
+            // blockIconURI: blockIconURI,
+            color1:'#3F51B5',
             blocks: [
             {
                 opcode: 'sha1',
@@ -287,11 +288,11 @@ class Scratch3CommunityBlocks {
                 arguments: {
                     a: {
                         type: ArgumentType.STRING,
-                        defaultValue: '1'
+                        defaultValue: 'a'
                     },
                     b: {
                         type: ArgumentType.STRING,
-                        defaultValue: '2'
+                        defaultValue: 'A'
                     },
                     operator: {
                         type: ArgumentType.STRING,
@@ -300,14 +301,155 @@ class Scratch3CommunityBlocks {
                     }
                 }
             },
+            {
+                opcode: 'operation2',
+                blockType: BlockType.BOOLEAN,
+                text: '[a][operator][b][operator2][c]',
+                arguments: {
+                    a: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '1'
+                    },
+                    b: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '2'
+                    },
+                    operator: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '<',
+                        menu:'operator'
+                    },
+                    operator2: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '<',
+                        menu:'operator'
+                    },
+                    c: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '3'
+                    },
+                }
+            },
+            {
+                opcode: 'boolean',
+                blockType: BlockType.BOOLEAN,
+                text: '[a]',
+                arguments: {
+                    a: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'true'
+                    },
+                }
+            },
+            {
+                opcode: '_true',
+                blockType: BlockType.BOOLEAN,
+                text: '真',
+                arguments: {
+                }
+            },
+            {
+                opcode: 'lj',
+                blockType: BlockType.REPORTER,
+                text: '连接[a][b][c]',
+                arguments: {
+                    a: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'a'
+                    },
+                    b: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'b'
+                    },
+                    c: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'c'
+                    },
+                }
+            },
+            {
+                opcode: 'lj2',
+                blockType: BlockType.REPORTER,
+                text: '连接[a][b][c][d]',
+                arguments: {
+                    a: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'a'
+                    },
+                    b: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'b'
+                    },
+                    c: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'c'
+                    },
+                    d: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'd'
+                    },
+                }
+            },
+            {
+                opcode: 'lj3',
+                blockType: BlockType.REPORTER,
+                text: '连接[a][b][c][d][e][f][g][h]',
+                arguments: {
+                    a: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'a'
+                    },
+                    b: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'b'
+                    },
+                    c: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'c'
+                    },
+                    d: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'd'
+                    },
+                    e: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'a'
+                    },
+                    f: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'b'
+                    },
+                    g: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'c'
+                    },
+                    h: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'd'
+                    },
+                }
+            },
             ],
             menus: {
                 USER_ATTR: ['user id', 'username'/*, 'user level'*/],
                 d:['大写','小写'],
                 time:['标准','时间戳'],
-                operator:['==','>=','<=']
+                operator:['==','>=','<=','!=','<','>']
             }
         };
+    }
+
+    lj({a,b,c}){
+        return a.toString()+b.toString()+c.toString();
+    }
+
+    lj2({a,b,c,d}){
+        return a.toString()+b.toString()+c.toString()+d.toString();
+    }
+
+    lj3({a,b,c,d,e,f,g,h}){
+        return a.toString()+b.toString()+c.toString()+d.toString()
+        +e.toString()+f.toString()+g.toString()+h.toString();
     }
 
     getUserInfo(args, util) {
@@ -345,6 +487,9 @@ class Scratch3CommunityBlocks {
         }
         
     }
+    _true(){
+        return true;
+    }
     jq(url) {
         try{
             let a,b;
@@ -379,9 +524,9 @@ class Scratch3CommunityBlocks {
     }
     jd(a) {
         try {
-            x = Math.abs(a.x1 - a.x2);
-            y = Math.abs(a.y1 - a.y2);
-            z = Math.sqrt(x * x + y * y);
+            var x = Math.abs(a.x1 - a.x2);
+            var y = Math.abs(a.y1 - a.y2);
+            var z = Math.sqrt(x * x + y * y);
             return Math.round(Math.asin(y / z) / Math.PI * 180);
         } catch (e) {
             return e;//'error';
@@ -640,7 +785,63 @@ class Scratch3CommunityBlocks {
                 return a>=b;
             case '<=':
                 return a<=b;
+            case '!=':
+                return a!=b;
+            case '<':
+                return a<b;
+            case '>':
+                return a>b;
         }
+    }
+    operation2({a,operator,b,operator2,c}){
+        let tmp;
+        console.log(a,operator,b,operator2,c)
+        switch (operator) {
+            case '==':
+                tmp = (a===b);
+                break;
+            case '>=':
+                tmp = (a>=b);
+                break;
+            case '<=':
+                tmp = (a<=b);
+                break;
+            case '!=':
+                tmp = (a!=b);
+                break;
+            case '<':
+                tmp = (a<b);
+                break;
+            case '>':
+                tmp = (a>b);
+                break;
+        }
+        console.log(tmp)
+        if(!tmp) return false;
+        switch (operator2) {
+            case '==':
+                tmp = (b===c);
+                break;
+            case '>=':
+                tmp = (b>=c);
+                break;
+            case '<=':
+                tmp = (b<=c);
+                break;
+            case '!=':
+                tmp = (b!=c);
+                break;
+            case '<':
+                tmp = (b<c);
+                break;
+            case '>':
+                tmp = (b>c);
+                break;
+        }
+        return tmp
+    }
+    boolean({a}){
+        return a;
     }
     /*
         pay(args, util) {

@@ -37,7 +37,8 @@ class Scratch3setBlocks {
         return {
             id: 'set',
             name: 'set',
-            blockIconURI: blockIconURI,
+            // blockIconURI: blockIconURI,
+            color1:'#009688',
             blocks: [
                 {
                     opcode: 'f',
@@ -47,42 +48,171 @@ class Scratch3setBlocks {
                         a: {
                             type: ArgumentType.NUMBER,
                             defaultValue: '30帧',
-                            menu:'z'
+                            menu: 'z'
                         },
                     },
                 },
-                // {
-                //     opcode: 'return',
-                //     blockType: BlockType.COMMAND,
-                //     text: '返回[a]',
-                //     arguments: {
-                //         a: {
-                //             type: ArgumentType.STRING,
-                //             defaultValue: '1',
-                //         },
-                //     }
-                // }
+                {
+                    opcode: 'set',
+                    blockType: BlockType.COMMAND,
+                    text: '设置id为[cid]的角色中id为[id]的造型的svg为[svg]',
+                    arguments: {
+                        // m: {
+                        //     type: ArgumentType.STRING,
+                        //     defaultValue: '设置',
+                        //     menu: 'm'
+                        // },
+                        // type: {
+                        //     type: ArgumentType.STRING,
+                        //     defaultValue: 'id',
+                        //     menu: 'type'
+                        // },
+                        id: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        },
+                        cid: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        },
+                        svg: {
+                            type: ArgumentType.STRING,
+                            defaultValue: `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="91.88867" height="18" viewBox="0,0,91.88867,18"><g transform="translate(-194.88452,-170)"><g data-paper-data="{&quot;isPaintingLayer&quot;:true}" fill="#66aaff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif" font-weight="400" font-size="15" text-anchor="start" style="mix-blend-mode: normal"><text transform="translate(195.38452,184.5)" font-size="15" xml:space="preserve" fill="#66aaff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif" font-weight="400" text-anchor="start" style="mix-blend-mode: normal"><tspan x="0" dy="0">I love 40code</tspan></text></g></g></svg>`
+                        }
+                    },
+                },
+                {
+                    opcode: 'set2',
+                    blockType: BlockType.COMMAND,
+                    text: '设置id为[cid]的角色中id为[id]的造型的svg为[svg]，于x[x]y[y]',
+                    arguments: {
+                        id: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        },
+                        x: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '-240'
+                        },
+                        y: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '180'
+                        },
+                        cid: {
+                            type: ArgumentType.NUMBER,
+                            defaultValue: '0'
+                        },
+                        svg: {
+                            type: ArgumentType.STRING,
+                            defaultValue: `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="91.88867" height="18" viewBox="0,0,91.88867,18"><g transform="translate(-194.88452,-170)"><g data-paper-data="{&quot;isPaintingLayer&quot;:true}" fill="#66aaff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif" font-weight="400" font-size="15" text-anchor="start" style="mix-blend-mode: normal"><text transform="translate(195.38452,184.5)" font-size="15" xml:space="preserve" fill="#66aaff" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="&quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif" font-weight="400" text-anchor="start" style="mix-blend-mode: normal"><tspan x="0" dy="0">I love 40code</tspan></text></g></g></svg>`
+                        }
+                    },
+                },
+                {
+                    opcode: 'runBlock',
+                    blockType: BlockType.REPORTER,
+                    text: '运行opcode[opcode]，传入[a]',
+                    arguments: {
+                        opcode: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'motion_gotoxy'
+                        },
+                        a: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '{"X":100,"Y":60}'
+                        }
+                    },
+                },
+                {
+                    opcode: 'runBlock2',
+                    blockType: BlockType.COMMAND,
+                    text: '运行opcode[opcode]，传入[a]',
+                    arguments: {
+                        opcode: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'motion_gotoxy'
+                        },
+                        a: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '{"X":100,"Y":60}'
+                        }
+                    },
+                },
+
             ],
             menus: {
-              z:['30帧','60帧']
+                z: ['30帧', '60帧'],
+                type: ['id'],
+                m: ['设置']
             }
         };
     }
-   f(a){
-       //console.log(this.runtime)
-       let zz;
-       if(a.a=='30帧')
-        zz=1;
-       else
-        zz=0;
-       this.runtime.setCompatibilityMode(zz);
-       //console.log(this.runtime,this);
-   }
-   return(a,util){
-       console.log(util)
-    util.stopThisScript();
-   }
-   
+    f(a) {
+        //console.log(this.runtime)
+        let zz;
+        if (a.a == '30帧')
+            zz = 1;
+        else
+            zz = 0;
+        this.runtime.setCompatibilityMode(zz);
+        //console.log(this.runtime,this);
+    }
+    set({ svg, id, cid }) {
+        try {
+            vm._updateSvg(vm.runtime.targets[cid].getCostumes()[id], svg, 0, 0)
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+    set2({ svg, id, cid, x, y }) {
+        try {
+            vm._updateSvg(vm.runtime.targets[cid].getCostumes()[id], svg, -x, y)
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+    runBlock({ opcode, a }, util) {
+        try {
+            let s = opcode.split('_')
+            if(s[1].toLowerCase()=='constructor') return '';
+            if (builtinExtensions[s[0]]) {
+                let w=(new (builtinExtensions[s[0]]())).__proto__;
+                let o=Object.getOwnPropertyNames(w);
+                
+                for(let i=0;i<o.length;i++){
+                    if(o[i].toLowerCase()==s[1].toLowerCase()){
+                        s[1]=o[i];
+                    }
+                }
+                let r=(w[s[1]])(JSON.parse(a), util)
+                console.log(r)
+                return r;
+            }
+            if (defaultBlockPackages['scratch3_' + s[0]]) {
+                let w=(new defaultBlockPackages['scratch3_' + s[0]]).__proto__;
+                let o=Object.getOwnPropertyNames(w);
+                for(let i=0;i<o.length;i++){
+                    if(o[i].toLowerCase()==s[1].toLowerCase()){
+                        s[1]=o[i];
+                    }
+                }
+                console.log(w,s)
+                let r=(w[s[1]])(JSON.parse(a), util);
+                console.log(r)
+                return r;
+            }
+
+        } catch (e) {
+            console.log(e)
+            return e;
+        }
+
+    }
+    runBlock2(a,u){
+        this.runBlock(a,u)
+    }
 }
 
 module.exports = Scratch3setBlocks;

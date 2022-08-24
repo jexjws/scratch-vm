@@ -43,6 +43,8 @@ const defaultBlockPackages = {
     scratch3_procedures: require('../blocks/scratch3_procedures')
 };
 
+window.defaultBlockPackages=defaultBlockPackages;
+
 const interpolate = require('./tw-interpolate');
 const FrameLoop = require('./tw-frame-loop');
 

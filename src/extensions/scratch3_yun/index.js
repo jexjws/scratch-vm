@@ -37,7 +37,8 @@ class Scratch3yunBlocks {
         return {
             id: 'yun',
             name: 'yun',
-            blockIconURI: blockIconURI,
+            // blockIconURI: blockIconURI,
+            color1:'#00BCD4',
             blocks: [
                 {
                     opcode: 'yunload',

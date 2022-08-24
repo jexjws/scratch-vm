@@ -37,8 +37,9 @@ class Scratch3JsonBlocks {
         return {
             id: 'astar',
             name: '寻路算法',
-            blockIconURI: blockIconURI,
-            menuIconURI: menuIconURI,
+            // blockIconURI: blockIconURI,
+            // menuIconURI: menuIconURI,
+            color1:'#8BC34A',
             blocks: [
                 {
                     opcode: 'createNet',

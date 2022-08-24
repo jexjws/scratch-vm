@@ -35,8 +35,8 @@ class Scratch3JsBlocks {
         return {
             id: 'js',
             name: 'JavaScript',
-            blockIconURI: blockIconURI,
-            menuIconURI: menuIconURI,
+            // blockIconURI: blockIconURI,
+            // menuIconURI: menuIconURI,
             blocks: [
                 {
                     opcode: 'sb',
@@ -91,6 +91,18 @@ class Scratch3JsBlocks {
                     }
                 },
                 {
+                    opcode: 'len',
+                    blockType: BlockType.REPORTER,
+                    text: '[a]的长度',
+                    arguments: {
+                        a: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '["a","b","c"]'
+                        },
+                       
+                    }
+                },
+                {
                     opcode: 'dx3',
                     blockType: BlockType.REPORTER,
                     text: '设置json对象[a]的第[b]项为[c]并返回',
@@ -134,6 +146,32 @@ class Scratch3JsBlocks {
                             defaultValue: 'I_want_an_apple'
                         },
                     }
+                },
+                {
+                    opcode: 'setv',
+                    blockType: BlockType.COMMAND,
+                    text: '设置局部变量[a]的值为[b]',
+                    arguments: {
+                        a: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'a'
+                        },
+                        b: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'b'
+                        },
+                    }
+                },
+                {
+                    opcode: 'getv',
+                    blockType: BlockType.REPORTER,
+                    text: '获取局部变量[a]的值',
+                    arguments: {
+                        a: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'a'
+                        },
+                    }
                 }
             ],
             menus: {
@@ -170,6 +208,14 @@ class Scratch3JsBlocks {
         }catch(e){
             return '';
         }
+    }
+    len({a}){
+        try{
+            return JSON.parse(a).length;
+        }catch(e){
+            return 'NaN'
+        }
+        
     }
     dx2(a){
         try{
@@ -210,6 +256,16 @@ class Scratch3JsBlocks {
         }catch(e){
             return '';
         }
+    }
+    setv({a,b},util){
+        console.log(util.thread)
+        util.thread.values || (util.thread.values={});
+        util.thread.values.a=b
+    }
+    getv({a,b},util){
+        console.log(util.thread)
+        util.thread.values || (util.thread.values={});
+        return util.thread.values.a
     }
 }
 

@@ -5,6 +5,7 @@ const Variable = require('../engine/variable');
 const log = require('../util/log');
 const {IntermediateScript, IntermediateRepresentation} = require('./intermediate');
 const compatBlocks = require('./compat-blocks');
+const { Console } = require('minilog');
 
 /**
  * @fileoverview Generate intermediate representations from Scratch blocks.
@@ -82,6 +83,7 @@ class ScriptTreeGenerator {
         this.variableCache = {};
 
         this.usesTimer = false;
+        console.log("ScriptTreeGenerator");
     }
 
     setProcedureVariant (procedureVariant) {
@@ -235,7 +237,93 @@ class ScriptTreeGenerator {
                 index: index
             };
         }
+        case 'procedures_call_with_return': {
+            // setting of yields will be handled later in the analysis phase
+            const procedureCode = block.mutation.proccode;
+            const paramNamesIdsAndDefaults = this.blocks.getProcedureParamNamesIdsAndDefaults(procedureCode);
+            if (paramNamesIdsAndDefaults === null) {
+                return {
+                    kind: 'noop'
+                };
+            }
+            const [paramNames, paramIds, paramDefaults] = paramNamesIdsAndDefaults;
+            const addonBlock = this.runtime.getAddonBlock(procedureCode);
+            if (addonBlock) {
+                this.script.yields = true;
+                const args = {};
+                for (let i = 0; i < paramIds.length; i++) {
+                    let value;
+                    if (block.inputs[paramIds[i]] && block.inputs[paramIds[i]].block) {
+                        value = this.descendInputOfBlock(block, paramIds[i]);
+                    } else {
+                        value = {
+                            kind: 'constant',
+                            value: paramDefaults[i]
+                        };
+                    }
+                    args[paramNames[i]] = value;
+                }
+                return {
+                    kind: 'addons.call',
+                    code: procedureCode,
+                    arguments: args,
+                    blockId: block.id
+                };
+            }
 
+            const definitionId = this.blocks.getProcedureDefinition(procedureCode);
+            const definitionBlock = this.blocks.getBlock(definitionId);
+            if (!definitionBlock) {
+                return {
+                    kind: 'noop'
+                };
+            }
+            const innerDefinition = this.blocks.getBlock(definitionBlock.inputs.custom_block.block);
+            let isWarp = this.script.isWarp;
+            if (!isWarp) {
+                if (innerDefinition && innerDefinition.mutation) {
+                    const warp = innerDefinition.mutation.warp;
+                    if (typeof warp === 'boolean') {
+                        isWarp = warp;
+                    } else if (typeof warp === 'string') {
+                        isWarp = JSON.parse(warp);
+                    }
+                }
+            }
+
+            const variant = generateProcedureVariant(procedureCode, isWarp);
+
+            if (!this.script.dependedProcedures.includes(variant)) {
+                this.script.dependedProcedures.push(variant);
+            }
+
+            // Non-warp direct recursion yields.
+            if (!this.script.isWarp) {
+                if (procedureCode === this.script.procedureCode) {
+                    this.script.yields = true;
+                }
+            }
+
+            const args = [];
+            for (let i = 0; i < paramIds.length; i++) {
+                let value;
+                if (block.inputs[paramIds[i]] && block.inputs[paramIds[i]].block) {
+                    value = this.descendInputOfBlock(block, paramIds[i]);
+                } else {
+                    value = {
+                        kind: 'constant',
+                        value: paramDefaults[i]
+                    };
+                }
+                args.push(value);
+            }
+            return {
+                kind: 'procedures.return_call',
+                code: procedureCode,
+                variant,
+                arguments: args
+            };
+        }
         case 'data_variable':
             return {
                 kind: 'var.get',
@@ -320,6 +408,13 @@ class ScriptTreeGenerator {
         case 'operator_add':
             return {
                 kind: 'op.add',
+                left: this.descendInputOfBlock(block, 'NUM1'),
+                right: this.descendInputOfBlock(block, 'NUM2')
+            };
+            //milk
+        case 'operator_power':
+            return {
+                kind: 'op.power',
                 left: this.descendInputOfBlock(block, 'NUM1'),
                 right: this.descendInputOfBlock(block, 'NUM2')
             };
@@ -654,6 +749,7 @@ class ScriptTreeGenerator {
             };
 
         default: {
+            console.log("wqq")
             const opcodeFunction = this.runtime.getOpcodeFunction(block.opcode);
             if (opcodeFunction) {
                 // It might be a non-compiled primitive from a standard category
@@ -1113,7 +1209,11 @@ class ScriptTreeGenerator {
             return {
                 kind: 'pen.stamp'
             };
-
+        case 'procedures_return':
+            return {
+                kind: 'procedures.return',
+                return: this.descendInputOfBlock(block, 'RETURN'),
+            };
         case 'procedures_call': {
             // setting of yields will be handled later in the analysis phase
 
@@ -1217,7 +1317,8 @@ class ScriptTreeGenerator {
                 kind: 'timer.reset'
             };
 
-        default: {
+        default: {            
+            console.log("qq")
             const opcodeFunction = this.runtime.getOpcodeFunction(block.opcode);
             if (opcodeFunction) {
                 // It might be a non-compiled primitive from a standard category
@@ -1235,14 +1336,16 @@ class ScriptTreeGenerator {
             }
 
             // When this thread was triggered by a stack click, attempt to compile as an input.
-            // TODO: perhaps this should be moved to generate()?
-            if (this.thread.stackClick) {
+            // TODO: perhaps this should be moved to generate()?procedures_call_with_return
+
+            if (this.thread.stackClick) {//block.opcode
                 try {
                     const inputNode = this.descendInput(block);
-                    return {
-                        kind: 'visualReport',
-                        input: inputNode
-                    };
+                    console.log(inputNode)
+                        return {
+                            kind:'visualReport',
+                            input: inputNode
+                        };                        
                 } catch (e) {
                     // Ignore
                 }
@@ -1495,6 +1598,7 @@ class IRGenerator {
         this.procedures = {};
 
         this.analyzedProcedures = [];
+        console.log("IRGenerator")
     }
 
     addProcedureDependencies (dependencies) {

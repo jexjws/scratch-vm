@@ -49,6 +49,7 @@ class Scratch3LazyAudioBlocks {
             name: 'LazyAudio',
             menuIconURI: menuIconURI,
             blockIconURI: blockIconURI,
+            color1:'#9C27B0',
             blocks: [{
                 opcode: 'load',
                 blockType: BlockType.COMMAND,

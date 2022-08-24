@@ -37,7 +37,8 @@ class Scratch3threeBlocks {
         return {
             id: 'three',
             name: '3D引擎',
-            blockIconURI: blockIconURI,
+            // blockIconURI: blockIconURI,
+            color1:'#F4511E',
             blocks: [
                 {
                     opcode: 'f',
