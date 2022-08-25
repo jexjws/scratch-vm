@@ -364,14 +364,19 @@ class ExtensionManager {
         extensionInfo.blocks = extensionInfo.blocks.reduce((results, blockInfo) => {
             try {
                 let result;
-                switch (blockInfo) {
-                case '---': // separator
-                    result = '---';
-                    break;
-                default: // an ExtensionBlockMetadata object
+                if(typeof blockInfo=='string'){
+                    result = blockInfo;
+                }else{
                     result = this._prepareBlockInfo(serviceName, blockInfo);
-                    break;
                 }
+                // switch (blockInfo) {
+                // case '---': // separator
+                //     result = '---';
+                //     break;
+                // default: // an ExtensionBlockMetadata object
+                //     result = this._prepareBlockInfo(serviceName, blockInfo);
+                //     break;
+                // }
                 results.push(result);
             } catch (e) {
                 // TODO: more meaningful error reporting

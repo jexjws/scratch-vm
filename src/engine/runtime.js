@@ -1177,7 +1177,9 @@ class Runtime extends EventEmitter {
         if (blockInfo === '---') {
             return this._convertSeparatorForScratchBlocks(blockInfo);
         }
-
+        if (typeof blockInfo === 'string') {
+            return this._convertTextForScratchBlocks(blockInfo);
+        }
         if (blockInfo.blockType === BlockType.BUTTON) {
             return this._convertButtonForScratchBlocks(blockInfo);
         }
@@ -1328,7 +1330,7 @@ class Runtime extends EventEmitter {
         const mutation = blockInfo.isDynamic ? `<mutation blockInfo="${xmlEscape(JSON.stringify(blockInfo))}"/>` : '';
         const inputs = context.inputList.join('');
         const blockXML = `<block type="${extendedOpcode}">${mutation}${inputs}</block>`;
-
+        console.log(blockXML)
         return {
             info: context.blockInfo,
             json: context.blockJSON,
@@ -1347,6 +1349,12 @@ class Runtime extends EventEmitter {
         return {
             info: blockInfo,
             xml: '<sep gap="36"/>'
+        };
+    }
+    _convertTextForScratchBlocks (blockInfo) {
+        return {
+            info: blockInfo,
+            xml: `<label text="${blockInfo}"></label>`
         };
     }
 

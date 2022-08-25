@@ -39,6 +39,7 @@ class Scratch3JsonBlocks {
             // blockIconURI: blockIconURI,
             // menuIconURI: menuIconURI,
             blocks: [
+                'JS变量相关',
                 {
                     opcode: 'sb',
                     blockType: BlockType.COMMAND,
@@ -65,6 +66,33 @@ class Scratch3JsonBlocks {
                         }
                     }
                 },
+                {
+                    opcode: 'setv',
+                    blockType: BlockType.COMMAND,
+                    text: '设置局部变量[a]的值为[b]',
+                    arguments: {
+                        a: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'i'
+                        },
+                        b: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '0'
+                        },
+                    }
+                },
+                {
+                    opcode: 'getv',
+                    blockType: BlockType.REPORTER,
+                    text: '获取局部变量[a]的值',
+                    arguments: {
+                        a: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'i'
+                        },
+                    }
+                },
+                'JS与scratch列表交互',
                 {
                     opcode: 'getScratchList',
                     blockType: BlockType.REPORTER,
@@ -95,6 +123,7 @@ class Scratch3JsonBlocks {
                         }
                     }
                 },
+                'JSON操作',
                 {
                     opcode: 'dx2',
                     blockType: BlockType.REPORTER,
@@ -144,6 +173,22 @@ class Scratch3JsonBlocks {
                         },
                     }
                 },
+                {
+                    opcode: 'stos2',
+                    blockType: BlockType.REPORTER,
+                    text: '使用[a]连接[b]',
+                    arguments: {
+                        a: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '_'
+                        },
+                        b: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '["I","want","an","apple"]'
+                        },
+                    }
+                },
+                'fetch请求',
                 {
                     opcode: 'setHeaders',
                     blockType: BlockType.COMMAND,
@@ -211,32 +256,8 @@ class Scratch3JsonBlocks {
                       
                     }
                 },
-                {
-                    opcode: 'setv',
-                    blockType: BlockType.COMMAND,
-                    text: '设置局部变量[a]的值为[b]',
-                    arguments: {
-                        a: {
-                            type: ArgumentType.STRING,
-                            defaultValue: 'i'
-                        },
-                        b: {
-                            type: ArgumentType.STRING,
-                            defaultValue: '0'
-                        },
-                    }
-                },
-                {
-                    opcode: 'getv',
-                    blockType: BlockType.REPORTER,
-                    text: '获取局部变量[a]的值',
-                    arguments: {
-                        a: {
-                            type: ArgumentType.STRING,
-                            defaultValue: 'i'
-                        },
-                    }
-                }
+                
+                
             ],
             menus: {
                 method:['GET','POST', 'PUT', 'DELETE','OPTIONS','HEAD','TRACE','CONNECT'],
@@ -414,6 +435,13 @@ class Scratch3JsonBlocks {
     stos(a){
         try{
             return a.b.split(a.a);
+        }catch(e){
+            return '';
+        }
+    }
+    stos2(a){
+        try{
+            return JSON.parse(a.b).join(a.a);
         }catch(e){
             return '';
         }

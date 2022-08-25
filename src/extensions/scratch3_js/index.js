@@ -148,6 +148,21 @@ class Scratch3JsBlocks {
                     }
                 },
                 {
+                    opcode: 'stos2',
+                    blockType: BlockType.REPORTER,
+                    text: '使用[a]连接[b]',
+                    arguments: {
+                        a: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '_'
+                        },
+                        b: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '["I","want","an","apple"]'
+                        },
+                    }
+                },
+                {
                     opcode: 'setv',
                     blockType: BlockType.COMMAND,
                     text: '设置局部变量[a]的值为[b]',
@@ -253,6 +268,13 @@ class Scratch3JsBlocks {
     stos(a){
         try{
             return a.b.split(a.a);
+        }catch(e){
+            return '';
+        }
+    }
+    stos2(a){
+        try{
+            return JSON.parse(a.b).join(a.a);
         }catch(e){
             return '';
         }

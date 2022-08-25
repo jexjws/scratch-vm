@@ -89,10 +89,17 @@ class Scratch3CommunityBlocks {
                     }
                 },
                 {
-                    opcode: 'getBrowserName',
-                    blockType: BlockType.REPORTER,
-                    text: '获取浏览器信息',
+                    opcode: 'setIntroduction',
+                    blockType: BlockType.COMMAND,
+                    text: '修改作品介绍[text]',
+                    arguments: {
+                        text: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '# 此介绍已被修改'
+                        }
+                    }
                 },
+                '弹窗',
                 {
                     opcode: 'ale',
                     blockType: BlockType.COMMAND,
@@ -157,6 +164,12 @@ class Scratch3CommunityBlocks {
                         }
                     }
                 },
+                '其他信息获取',
+                {
+                    opcode: 'getBrowserName',
+                    blockType: BlockType.REPORTER,
+                    text: '获取浏览器信息',
+                },
                 {
                     opcode: 'jt',
                     blockType: BlockType.REPORTER,
@@ -173,6 +186,7 @@ class Scratch3CommunityBlocks {
                         }
                     }
                 },
+                '文件上传和剪贴板',
                 {
                     opcode: 'copy',
                     blockType: BlockType.COMMAND,
@@ -199,18 +213,7 @@ class Scratch3CommunityBlocks {
                         }
                     }
                 },
-                {
-                    opcode: 'sj',
-                    blockType: BlockType.REPORTER,
-                    text: '获取时间[x]',
-                    arguments: {
-                        x: {
-                            type: ArgumentType.STRING,
-                            defaultValue: '标准',
-                            menu: 'time'
-                        }
-                    }
-                },
+                
                 {
                     opcode: 'upload',
                     blockType: BlockType.REPORTER,
@@ -223,14 +226,16 @@ class Scratch3CommunityBlocks {
                         }
                     }
                 },
+                '信息获取',
                 {
-                    opcode: 'setIntroduction',
-                    blockType: BlockType.COMMAND,
-                    text: '修改作品介绍[text]',
+                    opcode: 'sj',
+                    blockType: BlockType.REPORTER,
+                    text: '获取时间[x]',
                     arguments: {
-                        text: {
+                        x: {
                             type: ArgumentType.STRING,
-                            defaultValue: '# 此介绍已被修改'
+                            defaultValue: '标准',
+                            menu: 'time'
                         }
                     }
                 },
@@ -260,16 +265,16 @@ class Scratch3CommunityBlocks {
     }
     geth() {
         try {
-            let c = $('.stage_stage_DTWo5')[0].children[0].children[0]// ||  $('.stage_dragging-sprite_2rRMx')[0] 
-            return c.height;
+            let c = $('canvas')// ||  $('.stage_dragging-sprite_2rRMx')[0] 
+            return c[0] && c[0].height || c[1] && c[1].height || c[2] && c[2].height;
         } catch (e) {
             console.log(e)
         }
     }
     getw() {
         try {
-            let c =  $('.stage_stage_DTWo5')[0].children[0].children[0]//$('.stage_dragging-sprite_2rRMx')[0] ||
-            return c.width;
+            let c =  $('canvas')//$('.stage_dragging-sprite_2rRMx')[0] ||
+            return c[0] && c[0].width || c[1] && c[1].width || c[2] && c[2].width;
         } catch (e) {
             console.log(e)
         }
@@ -549,11 +554,14 @@ class Scratch3CommunityBlocks {
         return sha1(ss.c);
     }
     jt(a) {
-        let sss;
-        window.scratch.getProjectCover(cover => {
-            sss = cover;
-        })
-        return sss;
+        // let sss;
+        // window.scratch.getProjectCover(cover => {
+        //     sss = cover;
+        // })
+        // return sss;
+        let c =  $('canvas')//$('.stage_dragging-sprite_2rRMx')[0] ||
+        let _canvas=c[0] && c[0].width && c[0] || c[1] && c[1].width && c[1] || c[2] && c[2].width && c[2];
+        return _canvas.toDataURL()
     }
     tob(a) {
         try {
