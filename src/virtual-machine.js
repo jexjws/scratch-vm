@@ -24,6 +24,7 @@ const ExtendedJSON = require('./util/tw-extended-json');
 const {loadCostume} = require('./import/load-costume.js');
 const {loadSound} = require('./import/load-sound.js');
 const {serializeSounds, serializeCostumes} = require('./serialization/serialize-assets');
+const {exportCostume} = require('./serialization/tw-costume-import-export');
 require('canvas-toBlob');
 
 const RESERVED_NAMES = ['_mouse_', '_stage_', '_edge_', '_myself_', '_random_'];
@@ -998,6 +999,21 @@ class VirtualMachine extends EventEmitter {
         log.error(`Unhandled format: ${asset.dataFormat}`);
         return null;
     }
+
+    getExportedCostume (costumeObject) {
+        return exportCostume(costumeObject);
+    }
+
+    /**
+     * TW: Get a base64 string to use when exporting a costume to the user's local file system.
+     * @param {Costume} costumeObject scratch-vm costume object
+     * @returns {string} base64 string. Not a data: URI.
+     */
+    getExportedCostumeBase64 (costumeObject) {
+        const binaryData = this.getExportedCostume(costumeObject);
+        return Base64Util.uint8ArrayToBase64(binaryData);
+    }
+
 
     /**
      * Update a costume with the given bitmap
