@@ -123,6 +123,9 @@ class Scratch3yunBlocks {
         let isczy;
         temp2.yunrun || (temp2.yunrun=0);
         temp2.s || (temp2.s=setInterval(()=>{temp2.yunrun=0},1000))
+        if(typeof webpackJsonp!=='undefined'){
+            return;
+        }
         try {
             try {
                 workinfo;
@@ -147,6 +150,9 @@ class Scratch3yunBlocks {
     yunload(s) {
         if (!this.auth()) {
             // mdui.snackbar('创作页不可以使用云变量')
+        }
+        if(typeof webpackJsonp!=='undefined'){
+            return;
         }
         if (temp2.yunrun <= 15) {
             temp2.yunrun++;
@@ -186,6 +192,9 @@ class Scratch3yunBlocks {
         if (!this.auth()) {
             // mdui.snackbar('创作页不可以使用云变量')
         }
+        if(typeof webpackJsonp!=='undefined'){
+            return;
+        }
         if (temp2.yunrun <= 15) {
             temp2.yunrun++;
             return new Promise(resolve => {
@@ -221,6 +230,9 @@ class Scratch3yunBlocks {
         }
     }
     yunsave(s) {
+        if(typeof webpackJsonp!=='undefined'){
+            return;
+        }
         if (!this.auth()) {
             mdui.snackbar('创作页不可以使用云变量保存功能')
             return;

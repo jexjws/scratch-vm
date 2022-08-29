@@ -749,7 +749,7 @@ class ScriptTreeGenerator {
             };
 
         default: {
-            console.log("wqq")
+            // console.log("wqq")
             const opcodeFunction = this.runtime.getOpcodeFunction(block.opcode);
             if (opcodeFunction) {
                 // It might be a non-compiled primitive from a standard category
@@ -1341,7 +1341,7 @@ class ScriptTreeGenerator {
             if (this.thread.stackClick) {//block.opcode
                 try {
                     const inputNode = this.descendInput(block);
-                    console.log(inputNode)
+                    // console.log(inputNode)
                         return {
                             kind:'visualReport',
                             input: inputNode

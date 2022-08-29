@@ -139,7 +139,14 @@ const executeInCompatibilityLayer = function*(inputs, blockFunction, isWarp, use
         typeof value.then === 'function'
     );
 
-    let returnValue = executeBlock();
+    let returnValue;
+    try{
+        returnValue = executeBlock();
+    }catch(e){
+        console.error(e)
+        returnValue=""
+    }
+     
 
     if (isPromise(returnValue)) {
         returnValue = yield* waitPromise(returnValue);
@@ -162,7 +169,12 @@ const executeInCompatibilityLayer = function*(inputs, blockFunction, isWarp, use
             yield;
         }
 
-        returnValue = executeBlock();
+        try{
+            returnValue = executeBlock();
+        }catch(e){
+            console.error(e)
+            returnValue=""
+        }
 
         if (isPromise(returnValue)) {
             returnValue = yield* waitPromise(returnValue);

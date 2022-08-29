@@ -42,6 +42,7 @@ class Scratch3CommunityBlocks {
             // blockIconURI: blockIconURI,
             color1:'#3F51B5',
             blocks: [
+            '字符串处理',
             {
                 opcode: 'sha1',
                 blockType: BlockType.REPORTER,
@@ -61,17 +62,6 @@ class Scratch3CommunityBlocks {
                     text: {
                         type: ArgumentType.STRING,
                         defaultValue: '123456'
-                    }
-                }
-            },
-            {
-                opcode: 'js',
-                blockType: BlockType.REPORTER,
-                text: '运算[TEXT]',
-                arguments: {
-                    TEXT: {
-                        type: ArgumentType.STRING,
-                        defaultValue: 'sqrt(16)+PI+abs(-1)*(-1)'
                     }
                 }
             },
@@ -133,6 +123,53 @@ class Scratch3CommunityBlocks {
                 }
             },
             {
+                opcode: 'dx',
+                blockType: BlockType.REPORTER,
+                text: '将[a]转换成[x]',
+                arguments: {
+                    x: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '大写',
+                        menu: 'd',
+                    },
+                    a: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'aPple',
+                    }
+                }
+            },
+            {
+                opcode: 'cf',
+                blockType: BlockType.REPORTER,
+                text: '按[a]拆分[b]，获取拆分结果的第[c]项',
+                arguments: {
+                    a: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '_'
+                    },
+                    b: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'I_want_an_apple'
+                    },
+                    c: {
+                        type: ArgumentType.STRING,
+                        defaultValue: '1'
+                    }
+                }
+            },
+            '计算相关',
+            {
+                opcode: 'js',
+                blockType: BlockType.REPORTER,
+                text: '运算[TEXT]',
+                arguments: {
+                    TEXT: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'sqrt(16)+PI+abs(-1)*(-1)'
+                    }
+                }
+            },
+            {
                 opcode: 'jl',
                 blockType: BlockType.REPORTER,
                 text: 'x[x1]y[y1] x[x2]y[y2]的距离',
@@ -178,22 +215,7 @@ class Scratch3CommunityBlocks {
                     }
                 }
             },
-            {
-                opcode: 'dx',
-                blockType: BlockType.REPORTER,
-                text: '将[a]转换成[x]',
-                arguments: {
-                    x: {
-                        type: ArgumentType.STRING,
-                        defaultValue: '大写',
-                        menu: 'd',
-                    },
-                    a: {
-                        type: ArgumentType.STRING,
-                        defaultValue: 'aPple',
-                    }
-                }
-            },
+            '正则表达式搜索',
             {
                 opcode: 'zz',
                 blockType: BlockType.REPORTER,
@@ -209,6 +231,7 @@ class Scratch3CommunityBlocks {
                     }
                 }
             },
+            
             {
                 opcode: 'zz3',
                 blockType: BlockType.BOOLEAN,
@@ -243,25 +266,42 @@ class Scratch3CommunityBlocks {
                     }
                 }
             },
+            '普通搜索与替换',
             {
-                opcode: 'cf',
+                opcode: 'search',
                 blockType: BlockType.REPORTER,
-                text: '按[a]拆分[b]，获取拆分结果的第[c]项',
+                text: '在[a]中搜索[b]',
                 arguments: {
-                    a: {
-                        type: ArgumentType.STRING,
-                        defaultValue: '_'
-                    },
                     b: {
                         type: ArgumentType.STRING,
-                        defaultValue: 'I_want_an_apple'
+                        defaultValue: '8',
                     },
-                    c: {
+                    a: {
                         type: ArgumentType.STRING,
-                        defaultValue: '1'
+                        defaultValue: '18888888888',
                     }
                 }
             },
+            {
+                opcode: 'replace',
+                blockType: BlockType.REPORTER,
+                text: '将[a]中的[b]替换(replace)成[c]',
+                arguments: {
+                    b: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'scratch',
+                    },
+                    a: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'I love scratch.',
+                    },
+                    c:{
+                        type: ArgumentType.STRING,
+                        defaultValue: '40code',
+                    }
+                }
+            },
+            '便捷积木',
             {
                 opcode: 'tm',
                 blockType: BlockType.REPORTER,
@@ -348,6 +388,14 @@ class Scratch3CommunityBlocks {
                 arguments: {
                 }
             },
+            {
+                opcode: '_false',
+                blockType: BlockType.BOOLEAN,
+                text: '假',
+                arguments: {
+                }
+            },
+            '连接',
             {
                 opcode: 'lj',
                 blockType: BlockType.REPORTER,
@@ -490,6 +538,9 @@ class Scratch3CommunityBlocks {
     _true(){
         return true;
     }
+    _false(){
+        return false;
+    }
     jq(url) {
         try{
             let a,b;
@@ -531,98 +582,6 @@ class Scratch3CommunityBlocks {
         } catch (e) {
             return e;//'error';
         }
-    }
-    /*al2(url){
-        var extUtils = this.runtime.extUtils;
-        extUtils.Alerter.info(url.TEXT);
-    }*/
-    isValidUrl(url) {
-        var regex = /^((https|http|blob:http|blob:https)?:\/\/(sccode\.52msr\.cn|sccode\.ahy1\.top|music\.163\.com|sccode\.tk|127\.0\.0\.1)|(\/[^\/]))/;
-        //var regex2 = /^((blob)?:(sccode\.52msr\.cn|sccode\.ahy1\.top|music\.163\.com|sccode\.tk)|(\/[^\/]))/;
-        return regex.test(url.toLowerCase());//|| regex2.test(url.toLowerCase());
-    }
-
-    openUrl(args, util) {
-        if (this.isValidUrl(args.URL)) {
-            window.open(args.URL);
-        } else {
-            mdui.alert("该指令块仅可打开sccode编程社区、网易云音乐");
-        }
-    }
-
-    redirectUrl(args, util) {
-        if (this.isValidUrl(args.URL)) {
-            window.location = args.URL;
-        } else {
-            mdui.alert("该指令块仅可打开sccode编程社区、网易云音乐");
-        }
-    }
-    say(args, util) {
-        const message = args.TEXT;
-        console.log(message);
-        //this.runtime.emit('SAY', util.target, 'say', message);
-    }
-    userid(args, util) {
-        return mid;
-    }
-    username(args, util) {
-        return nm;
-    }
-    getBrowserName() {
-        return navigator.appVersion;
-    }
-    returnyunp() {
-        return returnyun;
-    }
-    getError() {
-        return yunerror;
-    }
-    yunload(s) {
-        mdui.snackbar("当前云数据即将弃用，请使用云数据扩展内模块");
-        if (yunrun <= 15) {
-            yunrun++;
-            $.ajax({
-                method: 'GET',
-                url: 'https://sccode.52msr.cn/works/yun/' + wd + '-' + s.TEXT,
-                dataType: 'json',
-                data: {
-                },
-                success: function (data) {
-                    returnyun = data.msg;
-                    return data.msg;
-                }
-            });
-        } else {
-            returnyun = 'error:请求频率过高';
-            return 'error:请求频率过高';
-        }
-
-    }
-    yunsave(args) {
-        mdui.snackbar("当前云数据即将弃用，请使用云数据扩展内模块");
-        if (yunrun <= 15) {
-            yunrun++;
-            $.ajax({
-                method: 'POST',
-                url: 'https://sccode.52msr.cn/works/yun/' + wd + '-' + args.TEXT2,
-                dataType: 'json',
-                data: {
-                    data: args.TEXT
-                },
-                success: function () {
-                    yunerror = '';
-                },
-                Error: function () {
-                    yunerror = 'error';
-                }
-            });
-            //yunerror = '数据没有加载';
-            return '';
-        } else {
-            yunerror = 'error:请求频率过高';
-            return 'error:请求频率过高';
-        }
-
     }
     md5({text}){
         try {
@@ -717,12 +676,27 @@ class Scratch3CommunityBlocks {
             return e;
         }
     }
+    search(a) {
+        try{
+            let v=a.b;
+            console.log(a)
+            return a.a.toString().search((v));
+        }catch(e){
+            return e;
+        }
+    }
     zz2(a) {
         try{
             let v=a.b;
-            if(v[0]!='/')
-            v='/'+v;
             return a.a.replace(new RegExp(v),a.c);
+        }catch(e){
+            return e;
+        }
+    }
+    replace(a) {
+        try{
+            let v=a.b;
+            return a.a.replace((v),a.c);
         }catch(e){
             return e;
         }
@@ -733,43 +707,6 @@ class Scratch3CommunityBlocks {
         } catch (error) {
             console.log(error);
         }
-    }
-    copy(a){
-        function copyText(text, callback){ // text: 要复制的内容， callback: 回调
-            var tag = document.createElement('input');
-            tag.setAttribute('id', 'cp_hgz_input');
-            tag.value = text;
-            document.getElementsByTagName('body')[0].appendChild(tag);
-            document.getElementById('cp_hgz_input').select();
-            document.execCommand('copy');
-            document.getElementById('cp_hgz_input').remove();
-            if(callback) {callback(text)}
-        }
-        copyText( a.t, function (){console.log('复制成功')});
-    }
-    dl(a){
-        function download(filename, text) {
-            var pom = document.createElement("a");
-            pom.setAttribute(
-                "href",
-                "data:text/plain;charset=utf-8," + encodeURIComponent(text)
-              );
-              pom.setAttribute("download", filename);
-              if (document.createEvent) {
-                var event = document.createEvent("MouseEvents");
-                event.initEvent("click", true, true);
-                pom.dispatchEvent(event);
-              } else {
-                pom.click();
-              }
-        }
-        download(a.n,a.t);
-    }
-    sj(a){
-        if(a.x=="标准")
-        return (new  Date()).toString();
-        else
-        return (new Date()).valueOf().toString();
     }
     cf(a){
         return a.b.split(a.a)[a.c-1];
@@ -841,6 +778,7 @@ class Scratch3CommunityBlocks {
         return tmp
     }
     boolean({a}){
+        throw 1;
         return a;
     }
     /*

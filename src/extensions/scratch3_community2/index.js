@@ -347,7 +347,9 @@ class Scratch3CommunityBlocks {
             });
             var int = setInterval(() => {
                 var f = $('.uploadfile');
-                if (!f[f.length - 1].files.length) return;
+                if (f[f.length - 1] && !f[f.length - 1].files.length){
+                    return;
+                } 
                 var reader = new FileReader();//新建⼀个FileReader
                 clearInterval(int)
                 d.close();
@@ -554,14 +556,15 @@ class Scratch3CommunityBlocks {
         return sha1(ss.c);
     }
     jt(a) {
-        // let sss;
-        // window.scratch.getProjectCover(cover => {
-        //     sss = cover;
-        // })
-        // return sss;
-        let c =  $('canvas')//$('.stage_dragging-sprite_2rRMx')[0] ||
-        let _canvas=c[0] && c[0].width && c[0] || c[1] && c[1].width && c[1] || c[2] && c[2].width && c[2];
-        return _canvas.toDataURL()
+        let sss;
+        console.log(1)
+        window.scratch.getProjectCover(cover => {
+            sss = cover;
+        })
+        return sss;
+        // let c =  $('canvas')//$('.stage_dragging-sprite_2rRMx')[0] ||
+        // let _canvas=c[0] && c[0].width && c[0] || c[1] && c[1].width && c[1] || c[2] && c[2].width && c[2];
+        // return _canvas.toDataURL()
     }
     tob(a) {
         try {

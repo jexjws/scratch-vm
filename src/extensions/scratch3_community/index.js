@@ -40,6 +40,7 @@ class Scratch3CommunityBlocks {
             id: 'community',
             name: 'Community',
             blockIconURI: blockIconURI,
+            hide:true,
             blocks: [{
                 opcode: 'getUserInfo',
                 blockType: BlockType.REPORTER,
