@@ -958,6 +958,11 @@ class Scratch3CanvasBlocks {
             for (var i = 0; i < 8; i++) this._canvasList.push(null);
             var tmpCanvas = this._createCanvas(w,h);
             if (!tmpCanvas) return null;
+            // try {
+            //     this._canvasList[0].remove();
+            // } catch (error) {
+            //     console.log(e)
+            // }
             this._canvasList[0] = tmpCanvas;
             this._canvas = tmpCanvas.canvas;
             this._ctx = tmpCanvas.ctx;

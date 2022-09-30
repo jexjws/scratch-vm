@@ -93,7 +93,7 @@ class Scratch3JsonBlocks {
                         },
                     }
                 },
-                'JS与scratch列表交互',
+                'JS与scratch交互',
                 {
                     opcode: 'getScratchList',
                     blockType: BlockType.REPORTER,
@@ -103,10 +103,6 @@ class Scratch3JsonBlocks {
                             type: ArgumentType.STRING,
                             defaultValue: 'scratch列表名'
                         },
-                        value: {
-                            type: ArgumentType.STRING,
-                            defaultValue: '[114,5,1,4]'
-                        }
                     }
                 },
                 {
@@ -121,6 +117,32 @@ class Scratch3JsonBlocks {
                         value: {
                             type: ArgumentType.STRING,
                             defaultValue: '[114,5,1,4]'
+                        }
+                    }
+                },
+                {
+                    opcode: 'getScratchValue',
+                    blockType: BlockType.REPORTER,
+                    text: '获取scratch变量[name]',
+                    arguments: {
+                        name: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'scratch变量名'
+                        },
+                    }
+                },
+                {
+                    opcode: 'setScratchValue',
+                    blockType: BlockType.COMMAND,
+                    text: '设置scratch变量[name]，值为[value]',
+                    arguments: {
+                        name: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'scratch变量名'
+                        },
+                        value: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '114514'
                         }
                     }
                 },
@@ -426,6 +448,14 @@ class Scratch3JsonBlocks {
     }
     setScratchList({ value, name }, util) {
         let list = util.target.lookupVariableByNameAndType(name, 'list')
+        list && value && (list.value = JSON.parse(value));
+    }
+    getScratchValue({ value, name }, util) {
+        let list = util.target.lookupVariableByNameAndType(name)
+        return JSON.stringify(list && list.value);
+    }
+    setScratchValue({ value, name }, util) {
+        let list = util.target.lookupVariableByNameAndType(name)
         list && value && (list.value = JSON.parse(value));
     }
     fetchAndWait(a) {

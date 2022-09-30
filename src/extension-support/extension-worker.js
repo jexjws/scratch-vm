@@ -8,6 +8,10 @@ const TargetType = require('../extension-support/target-type');
 const {isWorker} = require('./tw-extension-worker-context');
 
 const loadScripts = url => {
+    let u=['coreExample', 'lazyAudio', 'canvas', 'yun', 'js', 'jsonfetch', 'astar', 'three', 'box2d', 'ws', 'community', 'community2', 'yx', 'set', 'pen', 'wedo2', 'music', 'microbit', 'text2speech', 'translate', 'videoSensing', 'ev3', 'makeymakey', 'boost', 'gdxfor', 'tc', 'touch', 'tw'];
+    if(u.indexOf(url)===-1){
+        url='https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/ext/'+url+'.js'
+    }
     if (isWorker) {
         importScripts(url);
     } else {

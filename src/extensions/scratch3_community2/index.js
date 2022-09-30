@@ -171,6 +171,16 @@ class Scratch3CommunityBlocks {
                     text: '获取浏览器信息',
                 },
                 {
+                    opcode: 'ismobile',
+                    blockType: BlockType.BOOLEAN,
+                    text: '是手机吗？',
+                },
+                {
+                    opcode: 'platform',
+                    blockType: BlockType.REPORTER,
+                    text: '系统名',
+                },
+                {
                     opcode: 'jt',
                     blockType: BlockType.REPORTER,
                     text: '获取截图(base64)',
@@ -217,12 +227,17 @@ class Scratch3CommunityBlocks {
                 {
                     opcode: 'upload',
                     blockType: BlockType.REPORTER,
-                    text: '上传文件并获取文件内容，类型[type]',
+                    text: '上传文件并获取文件内容，类型[type]，以[out]读取',
                     arguments: {
                         type: {
                             type: ArgumentType.STRING,
-                            defaultValue: '文本',
+                            defaultValue: 'txt',
                             menu: 'type'
+                        },
+                        out: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '文本',
+                            menu: 'out'
                         }
                     }
                 },
@@ -242,12 +257,26 @@ class Scratch3CommunityBlocks {
                 {
                     opcode: 'geth',
                     blockType: BlockType.REPORTER,
-                    text: '播放器高度',
+                    text: '播放器高度(px)',
                     arguments: {
                     }
                 },
                 {
                     opcode: 'getw',
+                    blockType: BlockType.REPORTER,
+                    text: '播放器宽度(px)',
+                    arguments: {
+                    }
+                },
+                {
+                    opcode: 'geth2',
+                    blockType: BlockType.REPORTER,
+                    text: '播放器高度',
+                    arguments: {
+                    }
+                },
+                {
+                    opcode: 'getw2',
                     blockType: BlockType.REPORTER,
                     text: '播放器宽度',
                     arguments: {
@@ -259,7 +288,8 @@ class Scratch3CommunityBlocks {
                 WORK_ATTR: ['id', 'author', 'image', 'look', 'like', 'publish_time', 'time', 'update_time', 'nickname'],
                 d: ['大写', '小写'],
                 time: ['标准', '时间戳'],
-                type: ['文本']
+                type: ['txt','图片'],
+                out:['文本','blob','base64']
             }
         };
     }
@@ -278,6 +308,12 @@ class Scratch3CommunityBlocks {
         } catch (e) {
             console.log(e)
         }
+    }
+    geth2(){
+        return vm.runtime.stageHeight
+    }
+    getw2(){
+        return vm.runtime.stageWidth
     }
     getUserInfo(args, util) {
         let d;
@@ -331,33 +367,49 @@ class Scratch3CommunityBlocks {
             });
         })
     }
-    upload(url) {
+    upload({type,out}) {
         return new Promise((resolve) => {
-            var d = mdui.dialog({
-                title: '请选择文件',
-                content: '<input type="file" class="uploadfile" accept=".txt" />',
-                buttons: [
-                    {
-                        text: '取消',
-                        onClick: function (inst) {
-                            resolve('')
-                        }
-                    },
-                ]
-            });
+            // var d = mdui.dialog({
+            //     title: '请选择文件',
+            //     content: '<input type="file" class="uploadfile" accept=".txt" />',
+            //     buttons: [
+            //         {
+            //             text: '取消',
+            //             onClick: function (inst) {
+            //                 resolve('')
+            //             }
+            //         },
+            //     ]
+            // });
+            var d=document.createElement('input')
+            d.type="file";
+            if(type=='txt')
+            d.accept=".txt";
+            else(d.accept="image/*")
+            d.click();
             var int = setInterval(() => {
-                var f = $('.uploadfile');
-                if (f[f.length - 1] && !f[f.length - 1].files.length){
+                // var f = $('.uploadfile');
+                // if (f[f.length - 1] && !f[f.length - 1].files.length){
+                //     return;
+                // } 
+                if(!d.files.length){
                     return;
                 } 
                 var reader = new FileReader();//新建⼀个FileReader
                 clearInterval(int)
-                d.close();
+                // d.close();
                 try {
-                    reader.readAsText(f[f.length - 1].files[0], "UTF-8")
+                    // reader.readAsText(f[f.length - 1].files[0], "UTF-8")
+                    
+                    if(out=="blob") reader.readAsArrayBuffer(d.files[0])
+                    else if(out=="base64") reader.readAsDataURL(d.files[0])
+                    else 
+                    // if(out=="文本") 
+                    reader.readAsText(d.files[0], "UTF-8")
                     reader.onload = function (evt) { //读取完⽂件之后会回来这⾥
                         var fileString = evt.target.result; // 读取⽂件内容
-                        console.log(fileString)
+                        if(out=="blob")fileString=Object.createObjectURL(new Blob([fileString]))
+                        // console.log(fileString)
                         resolve(fileString)
                     }
 
@@ -368,6 +420,51 @@ class Scratch3CommunityBlocks {
             }, 50)
         })
     }
+    // upload2(url) {
+    //     return new Promise((resolve) => {
+    //         var d = mdui.dialog({
+    //             title: '请选择文件',
+    //             content: '<input type="file" class="uploadfile" accept=".txt" />',
+    //             buttons: [
+    //                 {
+    //                     text: '取消',
+    //                     onClick: function (inst) {
+    //                         resolve('')
+    //                     }
+    //                 },
+    //             ]
+    //         });
+    //         var d=document.createElement('input')
+    //         d.type="file";
+    //         d.accept=".txt";
+    //         d.click();
+    //         var int = setInterval(() => {
+    //             // var f = $('.uploadfile');
+    //             // if (f[f.length - 1] && !f[f.length - 1].files.length){
+    //             //     return;
+    //             // } 
+    //             if(!d.length){
+    //                 return;
+    //             } 
+    //             var reader = new FileReader();//新建⼀个FileReader
+    //             clearInterval(int)
+    //             d.close();
+    //             try {
+    //                 // reader.readAsText(f[f.length - 1].files[0], "UTF-8")
+    //                 reader.readAsText(d.files[0], "UTF-8")
+    //                 reader.onload = function (evt) { //读取完⽂件之后会回来这⾥
+    //                     var fileString = evt.target.result; // 读取⽂件内容
+    //                     console.log(fileString)
+    //                     resolve(fileString)
+    //                 }
+
+    //             } catch (error) {
+    //                 resolve('')
+    //                 console.log(error)
+    //             }
+    //         }, 50)
+    //     })
+    // }
     choice(a) {
         return new Promise((resolve) => {
             mdui.dialog({
@@ -469,7 +566,7 @@ class Scratch3CommunityBlocks {
 
     redirectUrl(args, util) {
         if (this.isValidUrl(args.URL)) {
-            window.location = args.URL;
+            top.location = args.URL;
         } else {
             mdui.alert("该指令块仅可打开40code编程社区");
         }
@@ -650,6 +747,12 @@ class Scratch3CommunityBlocks {
             mdui.snackbar("修改介绍(创作页提示)：" + markdownToHtml(a.text))
             console.log(e)
         }
+    }
+    ismobile(){
+        return navigator.userAgentData.mobile
+    }
+    platform(){
+        return navigator.userAgentData.platform
     }
     /*
         pay(args, util) {

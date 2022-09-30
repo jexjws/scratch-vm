@@ -46,6 +46,7 @@ const builtinExtensions = {
     boost: () => require('../extensions/scratch3_boost'),
     gdxfor: () => require('../extensions/scratch3_gdx_for'),
     tc: () => require('../extensions/scratch3_tc'),
+    touch: () => require('../extensions/scratch3_touch'),
     // tw: core extension
     tw: () => require('../extensions/tw')
 };
@@ -187,6 +188,7 @@ class ExtensionManager {
      * @returns {Promise} resolved once the extension is loaded and initialized or rejected on failure
      */
     loadExtensionURL (extensionURL) {
+        console.log(extensionURL);
         if (builtinExtensions.hasOwnProperty(extensionURL)) {
             /** @TODO dupe handling for non-builtin extensions. See commit 670e51d33580e8a2e852b3b038bb3afc282f81b9 */
             if (this.isExtensionLoaded(extensionURL)) {

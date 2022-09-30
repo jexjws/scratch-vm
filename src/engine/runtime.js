@@ -343,6 +343,7 @@ class Runtime extends EventEmitter {
             cloud: new Cloud(this),
             keyboard: new Keyboard(this),
             mouse: new Mouse(this),
+            // touch: new Touch(this),
             mouseWheel: new MouseWheel(this),
             userData: new UserData(),
             video: new Video(this)

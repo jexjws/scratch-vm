@@ -395,6 +395,16 @@ class Scratch3CommunityBlocks {
                 arguments: {
                 }
             },
+            {
+                opcode: 'when',
+                blockType: BlockType.HAT,
+                text: '当[c]',
+                arguments: {
+                    c: {
+                        type: ArgumentType.BOOLEAN,
+                    },
+                }
+            },
             '连接',
             {
                 opcode: 'lj',
@@ -778,8 +788,11 @@ class Scratch3CommunityBlocks {
         return tmp
     }
     boolean({a}){
-        throw 1;
+        // throw 1;
         return a;
+    }
+    when({c}){
+        return c;
     }
     /*
         pay(args, util) {
