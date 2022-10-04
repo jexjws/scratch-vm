@@ -9,7 +9,7 @@ const {isWorker} = require('./tw-extension-worker-context');
 
 const loadScripts = url => {
     let u=['coreExample', 'lazyAudio', 'canvas', 'yun', 'js', 'jsonfetch', 'astar', 'three', 'box2d', 'ws', 'community', 'community2', 'yx', 'set', 'pen', 'wedo2', 'music', 'microbit', 'text2speech', 'translate', 'videoSensing', 'ev3', 'makeymakey', 'boost', 'gdxfor', 'tc', 'touch', 'tw'];
-    if(u.indexOf(url)===-1){
+    if(typeof url!=='object' && u.indexOf(url)===-1 && !url.startsWith('blob:') && !url.startsWith('http')){
         url='https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/ext/'+url+'.js'
     }
     if (isWorker) {
@@ -19,6 +19,9 @@ const loadScripts = url => {
             const script = document.createElement('script');
             script.onload = () => resolve();
             script.onerror = () => reject(new Error(`Error when loading custom extension script: ${url}`));
+            if(typeof url==='object')
+            script.innerText=url.data
+            else
             script.src = url;
             document.body.appendChild(script);
         });

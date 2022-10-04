@@ -1,6 +1,6 @@
-const ArgumentType = require('scratch-vm/src/extension-support/argument-type');
-const BlockType = require('scratch-vm/src/extension-support/block-type');
-const MathUtil = require('scratch-vm/src/util/math-util');
+const ArgumentType = require('../../../src/extension-support/argument-type');
+const BlockType = require('../../../src/extension-support/block-type');
+const MathUtil = require('../../../src/util/math-util');
 
 /**
  * Icon svg to be displayed at the left edge of each extension block, encoded as a data URI.

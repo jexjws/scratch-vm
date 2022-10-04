@@ -1,12 +1,12 @@
-﻿const ArgumentType = require('scratch-vm/src/extension-support/argument-type');
-const BlockType = require('scratch-vm/src/extension-support/block-type');
-const Cast = require('scratch-vm/src/util/cast');
-const Clone = require('scratch-vm/src/util/clone');
-const Color = require('scratch-vm/src/util/color');
-const MathUtil = require('scratch-vm/src/util/math-util');
-const RenderedTarget = require('scratch-vm/src/sprites/rendered-target');
-const log = require('scratch-vm/src/util/log');
-const Variable = require('scratch-vm/src/engine/variable');
+﻿const ArgumentType = require('../../../src/extension-support/argument-type');
+const BlockType = require('../../../src/extension-support/block-type');
+const Cast = require('../../../src/util/cast');
+const Clone = require('../../../src/util/clone');
+const Color = require('../../../src/util/color');
+const MathUtil = require('../../../src/util/math-util');
+const RenderedTarget = require('../../../src/sprites/rendered-target');
+const log = require('../../../src/util/log');
+const Variable = require('../../../src/engine/variable');
 /**
  * Icon svg to be displayed at the left edge of each extension block, encoded as a data URI.
  * @type {string}
@@ -679,7 +679,7 @@ class Scratch3CommunityBlocks {
     }
     zz(a) {
         try{
-            let v=a.b;
+            let v=a.b.toString();
             console.log(a)
             return a.a.toString().search(new RegExp(v));
         }catch(e){
@@ -697,29 +697,29 @@ class Scratch3CommunityBlocks {
     }
     zz2(a) {
         try{
-            let v=a.b;
-            return a.a.replace(new RegExp(v),a.c);
+            let v=a.b.toString();
+            return a.a.toString().replace(new RegExp(v),a.c.toString());
         }catch(e){
             return e;
         }
     }
     replace(a) {
         try{
-            let v=a.b;
-            return a.a.replace((v),a.c);
+            let v=a.b.toString();
+            return a.a.toString().replace((v),a.c);
         }catch(e){
             return e;
         }
     }
     zz3({a,b}){
         try {
-            return (new RegExp(b)).test(a.toString())
+            return (new RegExp(b.toString())).test(a.toString())
         } catch (error) {
             console.log(error);
         }
     }
     cf(a){
-        return a.b.split(a.a)[a.c-1];
+        return a.b.toString().split(a.a.toString())[a.c-1];
     }
     tm({a,b,c}){
         return a?b:c

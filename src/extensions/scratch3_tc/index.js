@@ -1,12 +1,12 @@
-﻿const ArgumentType = require('scratch-vm/src/extension-support/argument-type');
-const BlockType = require('scratch-vm/src/extension-support/block-type');
-const Cast = require('scratch-vm/src/util/cast');
-const Clone = require('scratch-vm/src/util/clone');
-const Color = require('scratch-vm/src/util/color');
-const MathUtil = require('scratch-vm/src/util/math-util');
-const RenderedTarget = require('scratch-vm/src/sprites/rendered-target');
-const log = require('scratch-vm/src/util/log');
-const Variable = require('scratch-vm/src/engine/variable');
+﻿const ArgumentType = require('../../../src/extension-support/argument-type');
+const BlockType = require('../../../src/extension-support/block-type');
+const Cast = require('../../../src/util/cast');
+const Clone = require('../../../src/util/clone');
+const Color = require('../../../src/util/color');
+const MathUtil = require('../../../src/util/math-util');
+const RenderedTarget = require('../../../src/sprites/rendered-target');
+const log = require('../../../src/util/log');
+const Variable = require('../../../src/engine/variable');
 /**
  * Icon svg to be displayed at the left edge of each extension block, encoded as a data URI.
  * @type {string}
