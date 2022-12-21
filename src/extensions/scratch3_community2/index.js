@@ -176,6 +176,12 @@ class Scratch3CommunityBlocks {
                     text: '是手机吗？',
                 },
                 {
+                    opcode:'ios',
+                    blockType: BlockType.BOOLEAN,
+                    text: '是IOS吗',
+                    arguments: {}
+                },
+                {
                     opcode: 'platform',
                     blockType: BlockType.REPORTER,
                     text: '系统名',
@@ -223,7 +229,25 @@ class Scratch3CommunityBlocks {
                         }
                     }
                 },
-                
+                {
+                    opcode: 'dlWithSplit',
+                    blockType: BlockType.COMMAND,
+                    text: '下载文件名[n]，内容[t]，以[s]作为换行符',
+                    arguments: {
+                        t: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '114514 \\n 114 \\n 514',
+                        },
+                        n: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '114514.txt',
+                        },
+                        s: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '\\n',
+                        },
+                    }
+                },
                 {
                     opcode: 'upload',
                     blockType: BlockType.REPORTER,
@@ -368,47 +392,48 @@ class Scratch3CommunityBlocks {
         })
     }
     upload({type,out}) {
+        
         return new Promise((resolve) => {
-            // var d = mdui.dialog({
-            //     title: '请选择文件',
-            //     content: '<input type="file" class="uploadfile" accept=".txt" />',
-            //     buttons: [
-            //         {
-            //             text: '取消',
-            //             onClick: function (inst) {
-            //                 resolve('')
-            //             }
-            //         },
-            //     ]
-            // });
-            var d=document.createElement('input')
-            d.type="file";
-            if(type=='txt')
-            d.accept=".txt";
-            else(d.accept="image/*")
-            d.click();
-            var int = setInterval(() => {
-                // var f = $('.uploadfile');
-                // if (f[f.length - 1] && !f[f.length - 1].files.length){
-                //     return;
-                // } 
-                if(!d.files.length){
+            var getFileForIos = (fileObj,type)=>{
+                var file = fileObj,
+                    cvs = document.createElement('canvas');
+                var ctx = cvs.getContext("2d");
+                if(file){
+                    if(type=='blob' || type=='base64')
+                        var url = window.URL.createObjectURL(file);
+                    if(type=='blob'){
+                        resolve(url)
+                    }else if(type=='base64'){
+                        var img = new Image();
+                        img.src = url;
+                        img.onload = function(){
+                            ctx.clearRect(0,0,cvs.width,cvs.height);
+                            cvs.width = img.width;
+                            cvs.height = img.height;
+                            ctx.drawImage(img,0,0,img.width,img.height);
+                            var base64 = cvs.toDataURL("image/png");
+                            resolve(base64);
+                        }
+                    }else{
+                        resolve("");
+                    } 
+                }
+            }
+            var cFile=(file)=>{
+                if(this.ios()){
+                    getFileForIos(file,out);
                     return;
-                } 
+                }
                 var reader = new FileReader();//新建⼀个FileReader
-                clearInterval(int)
-                // d.close();
                 try {
                     // reader.readAsText(f[f.length - 1].files[0], "UTF-8")
                     
-                    if(out=="blob") reader.readAsArrayBuffer(d.files[0])
-                    else if(out=="base64") reader.readAsDataURL(d.files[0])
-                    else 
-                    // if(out=="文本") 
-                    reader.readAsText(d.files[0], "UTF-8")
+                    if(out=="blob") reader.readAsArrayBuffer(file)
+                    else if(out=="base64") reader.readAsDataURL(file)
+                    else reader.readAsText(file, "UTF-8")
                     reader.onload = function (evt) { //读取完⽂件之后会回来这⾥
                         var fileString = evt.target.result; // 读取⽂件内容
-                        if(out=="blob")fileString=URL.createObjectURL(new Blob([fileString],{type:d.files[0].type}))
+                        if(out=="blob") fileString=URL.createObjectURL(new Blob([fileString],{type:file.type}))
                         // console.log(fileString)
                         resolve(fileString)
                     }
@@ -417,6 +442,44 @@ class Scratch3CommunityBlocks {
                     resolve('')
                     console.log(error)
                 }
+            }
+            if(window.fileAlert && this.ios()){ 
+                window.fileAlert(f=>(cFile(f)));
+                return;
+            }
+            var d=document.createElement('input')
+            d.type="file";
+            if(type=='txt')
+            d.accept=".txt";
+            else(d.accept="image/*")
+            d.click();
+            // if(this.ios()){
+            //     try {
+            //         mdui.alert('<div class="showfile"><div>')
+            //     } catch (error) {
+            //         console.log(error);
+            //         try {
+            //             fileAlert(cFile);
+            //             return;
+            //         } catch (error) {
+            //             console.log(error);
+            //             resolve('')
+            //         }
+            //     }
+            //     // try {
+            //     //     let f=$('.showfile');
+            //     //     f[f.length-1].appendChild(d)
+            //     // } catch (error) {
+            //     //     console.log(error);
+            //     // }
+            // }
+            
+            var int = setInterval(() => {
+                if(!d.files.length){
+                    return;
+                } 
+                clearInterval(int)
+                cFile(d.files[0]);
             }, 50)
         })
     }
@@ -731,6 +794,24 @@ class Scratch3CommunityBlocks {
         }
         download(a.n, a.t);
     }
+    dlWithSplit(a) {
+        function download(filename, text) {
+            var pom = document.createElement("a");
+            pom.setAttribute(
+                "href",
+                "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+            );
+            pom.setAttribute("download", filename);
+            if (document.createEvent) {
+                var event = document.createEvent("MouseEvents");
+                event.initEvent("click", true, true);
+                pom.dispatchEvent(event);
+            } else {
+                pom.click();
+            }
+        }
+        download(a.n, a.t.toString().replaceAll(a.s,'\n'));
+    }
     sj(a) {
         if (a.x == "标准")
             return (new Date()).toString();
@@ -753,6 +834,11 @@ class Scratch3CommunityBlocks {
     }
     platform(){
         return navigator.userAgentData.platform
+    }
+    ios(){
+        var u = navigator.userAgent;
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        return isiOS;
     }
     /*
         pay(args, util) {

@@ -79,6 +79,9 @@ global.Scratch = global.Scratch || {};
 global.Scratch.ArgumentType = ArgumentType;
 global.Scratch.BlockType = BlockType;
 global.Scratch.TargetType = TargetType;
+global.console=console
+global._window=window
+// console.log(global.Scratch)
 
 /**
  * Expose only specific parts of the worker to extensions.

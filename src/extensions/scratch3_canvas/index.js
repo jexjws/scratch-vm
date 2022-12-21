@@ -963,6 +963,11 @@ class Scratch3CanvasBlocks {
             // } catch (error) {
             //     console.log(e)
             // }
+            try {
+                this._canvasList[0].remove()
+            } catch (error) {
+                console.log(error)
+            }
             this._canvasList[0] = tmpCanvas;
             this._canvas = tmpCanvas.canvas;
             this._ctx = tmpCanvas.ctx;
