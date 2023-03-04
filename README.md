@@ -4,15 +4,16 @@
 
 你的支持将是我继续开发40code的动力，谢谢你！
 
-[gui](https://github.com/52black/40code-gui)
+[gui](40code-gui)
 
-[vm](https://github.com/52black/scratch-vm)
+[vm](scratch-vm)
 
-[blocks](https://github.com/52black/scratch-blocks)
+[blocks](scratch-blocks)
 
-[desktop](https://github.com/52black/40code-desktop)
+[desktop](40code-desktop)
 
 此编辑器二次开发自turbowarp，以下是turbowarp的原README文件
+
 
 ***
 
