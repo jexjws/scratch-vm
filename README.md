@@ -1,4 +1,18 @@
-这是40code的编辑器的scratch-vm，采用AGPL协议，协议详见AGPL-LICENSE
+这是[40code](//40code.com)编辑器的vm，采用AGPL协议，协议详见AGPL-LICENSE文件
+
+支持我们（微信支付）：![](https://40code-cdn.zq990.com/static/internalapi/asset/cecf91556233ef5e02b2628df11bb473.png)
+
+你的支持将是我继续开发40code的动力，谢谢你！
+
+[gui](40code-gui)
+
+[vm](scratch-vm)
+
+[blocks](scratch-blocks)
+
+[desktop](40code-desktop)
+
+此编辑器二次开发自turbowarp，以下是turbowarp的原README文件
 
 ***
 

@@ -176,7 +176,7 @@ class Scratch3CommunityBlocks {
                     text: '是手机吗？',
                 },
                 {
-                    opcode:'ios',
+                    opcode: 'ios',
                     blockType: BlockType.BOOLEAN,
                     text: '是IOS吗',
                     arguments: {}
@@ -199,6 +199,28 @@ class Scratch3CommunityBlocks {
                         x: {
                             type: ArgumentType.STRING,
                             defaultValue: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAIAAAC0Ujn1AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD3SURBVEhL7ZQxCkIxDEA9iJtOOun2Ny/h5A2cXB28hYNnEDyDeCD/B1H5OPwaSCglbdLWIqj4yFDa9KX8tL9n3sZPqh/HU1PNzv1hMGCp3R8o1UNTg7ceTZmORT0YU7aHqE7xYtAGD1HdTCq7+bbe0KzDfbuTlhBRrXtTiKuVRumIaugPqmHwml1U46e0od+zIKIaYPbcApoa8O0QiQUiasQvoLwUS5IaYQWiB89QI+7NoSmBbLV7dpoSyFYDn6qG395lvpAaVaS2vz12hWEMM0Vqew2UuC5XlC0QVgcfoRvg7dqWsgW0NgYLpEgRTV3IX834RrUxT9CBgC1z1P22AAAAAElFTkSuQmCC'
+                        }
+                    }
+                },
+                {
+                    opcode: 'ttob',
+                    blockType: BlockType.REPORTER,
+                    text: '文本转换成blob[x]',
+                    arguments: {
+                        x: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '114514'
+                        }
+                    }
+                },
+                {
+                    opcode: 'sb',
+                    blockType: BlockType.COMMAND,
+                    text: '释放blob url[url]',
+                    arguments: {
+                        url: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'blob:'
                         }
                     }
                 },
@@ -246,6 +268,21 @@ class Scratch3CommunityBlocks {
                             type: ArgumentType.STRING,
                             defaultValue: '\\n',
                         },
+                    }
+                },
+                {
+                    opcode: 'downloadFile',
+                    blockType: BlockType.COMMAND,
+                    text: '下载url[url]，文件名[name]',
+                    arguments: {
+                        url: {
+                            type: ArgumentType.STRING,
+                            defaultValue: ' ',
+                        },
+                        name: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '114514',
+                        }
                     }
                 },
                 {
@@ -312,8 +349,8 @@ class Scratch3CommunityBlocks {
                 WORK_ATTR: ['id', 'author', 'image', 'look', 'like', 'publish_time', 'time', 'update_time', 'nickname'],
                 d: ['大写', '小写'],
                 time: ['标准', '时间戳'],
-                type: ['txt','图片'],
-                out:['文本','blob','base64']
+                type: ['txt', '图片'],
+                out: ['文本', 'blob', 'base64']
             }
         };
     }
@@ -327,16 +364,16 @@ class Scratch3CommunityBlocks {
     }
     getw() {
         try {
-            let c =  $('canvas')//$('.stage_dragging-sprite_2rRMx')[0] ||
+            let c = $('canvas')//$('.stage_dragging-sprite_2rRMx')[0] ||
             return c[0] && c[0].width || c[1] && c[1].width || c[2] && c[2].width;
         } catch (e) {
             console.log(e)
         }
     }
-    geth2(){
+    geth2() {
         return vm.runtime.stageHeight
     }
-    getw2(){
+    getw2() {
         return vm.runtime.stageWidth
     }
     getUserInfo(args, util) {
@@ -367,6 +404,9 @@ class Scratch3CommunityBlocks {
             return !!(Blockey.INIT_DATA.userProject && Blockey.INIT_DATA.userProject.isLoved);
         }
     */
+    sb({ url }) {
+        URL.revokeObjectURL(url);
+    }
     _math(a) {
         let b = a;
         const replaceStr2 = (str, index, char, t) => {
@@ -391,49 +431,66 @@ class Scratch3CommunityBlocks {
             });
         })
     }
-    upload({type,out}) {
-        
+    downloadFile({ url, name }) {
+        if (!this.isValidUrl(url)) {
+            mdui.snackbar('不支持下载这个链接');
+            return;
+        }
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.download = name || '40code下载的文件';
+        a.href = url;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        /*
+          * download: HTML5新增的属性
+          * url: 属性的地址必须是非跨域的地址
+           */
+    }
+    upload({ type, out }) {
+
         return new Promise((resolve) => {
-            var getFileForIos = (fileObj,type)=>{
+            var getFileForIos = (fileObj, type) => {
                 var file = fileObj,
                     cvs = document.createElement('canvas');
                 var ctx = cvs.getContext("2d");
-                if(file){
-                    if(type=='blob' || type=='base64')
+                if (file) {
+                    if (type == 'blob' || type == 'base64')
                         var url = window.URL.createObjectURL(file);
-                    if(type=='blob'){
+                    if (type == 'blob') {
                         resolve(url)
-                    }else if(type=='base64'){
+                    } else if (type == 'base64') {
                         var img = new Image();
                         img.src = url;
-                        img.onload = function(){
-                            ctx.clearRect(0,0,cvs.width,cvs.height);
+                        img.onload = function () {
+                            ctx.clearRect(0, 0, cvs.width, cvs.height);
                             cvs.width = img.width;
                             cvs.height = img.height;
-                            ctx.drawImage(img,0,0,img.width,img.height);
+                            ctx.drawImage(img, 0, 0, img.width, img.height);
                             var base64 = cvs.toDataURL("image/png");
                             resolve(base64);
                         }
-                    }else{
+                    } else {
                         resolve("");
-                    } 
+                    }
                 }
             }
-            var cFile=(file)=>{
-                if(this.ios()){
-                    getFileForIos(file,out);
+            var cFile = (file) => {
+                if (this.ios()) {
+                    getFileForIos(file, out);
                     return;
                 }
                 var reader = new FileReader();//新建⼀个FileReader
                 try {
                     // reader.readAsText(f[f.length - 1].files[0], "UTF-8")
-                    
-                    if(out=="blob") reader.readAsArrayBuffer(file)
-                    else if(out=="base64") reader.readAsDataURL(file)
+
+                    if (out == "blob") reader.readAsArrayBuffer(file)
+                    else if (out == "base64") reader.readAsDataURL(file)
                     else reader.readAsText(file, "UTF-8")
                     reader.onload = function (evt) { //读取完⽂件之后会回来这⾥
                         var fileString = evt.target.result; // 读取⽂件内容
-                        if(out=="blob") fileString=URL.createObjectURL(new Blob([fileString],{type:file.type}))
+                        if (out == "blob") fileString = URL.createObjectURL(new Blob([fileString], { type: file.type }))
                         // console.log(fileString)
                         resolve(fileString)
                     }
@@ -443,15 +500,15 @@ class Scratch3CommunityBlocks {
                     console.log(error)
                 }
             }
-            if(window.fileAlert && this.ios()){ 
-                window.fileAlert(f=>(cFile(f)));
+            if (window.fileAlert && this.ios()) {
+                window.fileAlert(f => (cFile(f)));
                 return;
             }
-            var d=document.createElement('input')
-            d.type="file";
-            if(type=='txt')
-            d.accept=".txt";
-            else(d.accept="image/*")
+            var d = document.createElement('input')
+            d.type = "file";
+            if (type == 'txt')
+                d.accept = ".txt";
+            else (d.accept = "image/*")
             d.click();
             // if(this.ios()){
             //     try {
@@ -473,11 +530,11 @@ class Scratch3CommunityBlocks {
             //     //     console.log(error);
             //     // }
             // }
-            
+
             var int = setInterval(() => {
-                if(!d.files.length){
+                if (!d.files.length) {
                     return;
-                } 
+                }
                 clearInterval(int)
                 cFile(d.files[0]);
             }, 50)
@@ -609,14 +666,14 @@ class Scratch3CommunityBlocks {
     }*/
     isValidUrl(url) {
         //var regex2 = /^((blob)?:(sccode\.52msr\.cn|sccode\.ahy1\.top|music\.163\.com|sccode\.tk)|(\/[^\/]))/;
+        if (typeof webpackJsonp !== 'undefined') return 1;
         try {
             let hosts = (new URL(url)).host.split('.');
             let domain = hosts.slice(hosts.length - 2, hosts.length - 0).join('.')
-            return ['40code.com', '40code.top', '40code.cn', '114514.wang', 'bu40.com'].indexOf(domain) != -1 || url.startsWith('blob:');//|| regex2.test(url.toLowerCase());
+            return ['40code.com', '40code.top', '40code.cn', '114514.wang', 'bu40.com', '40code-cdn.zq990.com'].indexOf(domain) != -1 || url.startsWith('blob:');//|| regex2.test(url.toLowerCase());
         } catch (error) {
             return 0;
         }
-
     }
 
     openUrl(args, util) {
@@ -733,6 +790,13 @@ class Scratch3CommunityBlocks {
             return e;
         }
     }
+    ttob(a) {
+        try {
+            return URL.createObjectURL(new Blob([a.x]));
+        } catch (e) {
+            return e;
+        }
+    }
     dx(a) {
         try {
             if (a.x == '大写')
@@ -810,7 +874,7 @@ class Scratch3CommunityBlocks {
                 pom.click();
             }
         }
-        download(a.n, a.t.toString().replaceAll(a.s,'\n'));
+        download(a.n, a.t.toString().replaceAll(a.s, '\n'));
     }
     sj(a) {
         if (a.x == "标准")
@@ -829,13 +893,13 @@ class Scratch3CommunityBlocks {
             console.log(e)
         }
     }
-    ismobile(){
+    ismobile() {
         return navigator.userAgentData.mobile
     }
-    platform(){
+    platform() {
         return navigator.userAgentData.platform
     }
-    ios(){
+    ios() {
         var u = navigator.userAgent;
         var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
         return isiOS;

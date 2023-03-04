@@ -138,7 +138,13 @@ class Scratch3setBlocks {
                         }
                     },
                 },
-
+                {
+                    opcode: 'id',
+                    blockType: BlockType.REPORTER,
+                    text: '当前角色id(实验性功能)',
+                    arguments: {
+                    },
+                },
             ],
             menus: {
                 z: ['30帧', '60帧'],
@@ -147,7 +153,7 @@ class Scratch3setBlocks {
             }
         };
     }
-    f(a) {
+    f(a,u) {
         //console.log(this.runtime)
         let zz;
         if (a.a == '30帧')
@@ -155,7 +161,8 @@ class Scratch3setBlocks {
         else
             zz = 0;
         this.runtime.setCompatibilityMode(zz);
-        //console.log(this.runtime,this);
+        console.log(u)
+        console.log(this.runtime,this,window);
     }
     set({ svg, id, cid }) {
         try {
@@ -212,6 +219,9 @@ class Scratch3setBlocks {
     }
     runBlock2(a,u){
         this.runBlock(a,u)
+    }
+    id(a,u){
+        return u.thread.target.drawableID;
     }
 }
 

@@ -4,7 +4,8 @@ const frameSource = require('./tw-load-script-as-plain-text!./tw-iframe-extensio
 const none = "'none'";
 const allow = '*';
 const featurePolicy = {
-    'accelerometer': none,
+    //取消沙盒限制
+    /*'accelerometer': none,
     'ambient-light-sensor': none,
     'autoplay': none,
     'battery': none,
@@ -28,7 +29,7 @@ const featurePolicy = {
     'vr': none,
     'screen-wake-lock': none,
     'web-share': none,
-    'interest-cohort': none
+    'interest-cohort': none*/
 };
 
 const generateAllow = () => Object.entries(featurePolicy)
@@ -46,8 +47,8 @@ class IframeExtensionWorker {
         this.iframe.className = 'tw-custom-extension-frame';
         this.iframe.dataset.id = this.id;
         this.iframe.style.display = 'none';
-        this.iframe.setAttribute('aria-hidden', 'true');
-        this.iframe.sandbox = 'allow-scripts';
+        // this.iframe.setAttribute('aria-hidden', 'true');
+        // this.iframe.sandbox = 'allow-scripts';
         this.iframe.allow = generateAllow();
         document.body.appendChild(this.iframe);
 

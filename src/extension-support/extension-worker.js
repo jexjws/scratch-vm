@@ -5,12 +5,14 @@ const BlockType = require('../extension-support/block-type');
 const dispatch = require('../dispatch/worker-dispatch');
 const log = require('../util/log');
 const TargetType = require('../extension-support/target-type');
-const {isWorker} = require('./tw-extension-worker-context');
+const { isWorker } = require('./tw-extension-worker-context');
 
 const loadScripts = url => {
-    let u=['coreExample', 'lazyAudio', 'canvas', 'yun', 'js', 'jsonfetch', 'astar', 'three', 'box2d', 'ws', 'community', 'community2', 'yx', 'set', 'pen', 'wedo2', 'music', 'microbit', 'text2speech', 'translate', 'videoSensing', 'ev3', 'makeymakey', 'boost', 'gdxfor', 'tc', 'touch', 'tw'];
-    if(typeof url!=='object' && u.indexOf(url)===-1 && !url.startsWith('blob:') && !url.startsWith('http')){
-        url='https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/ext/'+url+'.js'
+    if (typeof webpackJsonp == 'undefined') {
+        let u = ['coreExample', 'lazyAudio', 'canvas', 'yun', 'js', 'jsonfetch', 'astar', 'three', 'box2d', 'ws', 'community', 'community2', 'yx', 'set', 'pen', 'wedo2', 'music', 'microbit', 'text2speech', 'translate', 'videoSensing', 'ev3', 'makeymakey', 'boost', 'gdxfor', 'tc', 'touch', 'tw','other','p3d'];
+        if (typeof url !== 'object' && u.indexOf(url) === -1 && !url.startsWith('blob:') && !url.startsWith('http')) {
+            url = 'https://newsccode-1302921490.cos.ap-shanghai.myqcloud.com/ext/' + url + '.js'
+        }
     }
     if (isWorker) {
         importScripts(url);
@@ -19,17 +21,29 @@ const loadScripts = url => {
             const script = document.createElement('script');
             script.onload = () => resolve();
             script.onerror = () => reject(new Error(`Error when loading custom extension script: ${url}`));
-            if(typeof url==='object')
-            script.innerText=url.data
+            if (typeof url === 'object')
+                script.innerText = url.data
             else
-            script.src = url;
+                script.src = url;
             document.body.appendChild(script);
         });
+            // if (typeof url === 'object')
+            //     console.log(eval(url.data))
+            // else
+            //     return new Promise((resolve,reject)=>{
+            //         fetch(url)
+            //         .then(d=>d.text())
+            //         .then(d=>{
+            //             let f=eval(d)
+            //             console.log(d,f);
+            //             return f;
+            //         })
+            //     })
     }
 };
 
 class ExtensionWorker {
-    constructor () {
+    constructor() {
         this.nextExtensionId = 0;
 
         this.initialRegistrations = [];
@@ -61,7 +75,7 @@ class ExtensionWorker {
         this.extensions = [];
     }
 
-    register (extensionObject) {
+    register(extensionObject) {
         const extensionId = this.nextExtensionId++;
         this.extensions.push(extensionObject);
         const serviceName = `extension.${this.workerId}.${extensionId}`;
@@ -79,8 +93,11 @@ global.Scratch = global.Scratch || {};
 global.Scratch.ArgumentType = ArgumentType;
 global.Scratch.BlockType = BlockType;
 global.Scratch.TargetType = TargetType;
-global.console=console
-global._window=window
+global.Scratch.vm=top.vm;
+global.Scratch.unsandboxed=1;
+global.console = console
+// window.Scratch=global.Scratch
+// global._window = window
 // console.log(global.Scratch)
 
 /**

@@ -921,7 +921,7 @@ class Scratch3Griffpatch {
         this._checkMoved();
 
         // world.Step(1 / 30, 10, 10);
-        world.Step(1 / 30, 10, 10);
+        world.Step(1 / vm.runtime.frameLoop.framerate, 10, 10);
         world.ClearForces();
 
         for (const targetID in bodies) {

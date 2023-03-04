@@ -83,9 +83,24 @@ class Scratch3JsonBlocks {
                     }
                 },
                 {
+                    opcode: 'addv',
+                    blockType: BlockType.COMMAND,
+                    text: '将局部变量[a]增加[b]',
+                    arguments: {
+                        a: {
+                            type: ArgumentType.STRING,
+                            defaultValue: 'i'
+                        },
+                        b: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '1'
+                        },
+                    }
+                },
+                {
                     opcode: 'getv',
                     blockType: BlockType.REPORTER,
-                    text: '获取局部变量[a]的值',
+                    text: '局部变量[a]',
                     arguments: {
                         a: {
                             type: ArgumentType.STRING,
@@ -279,7 +294,7 @@ class Scratch3JsonBlocks {
                 {
                     opcode: 'fetchAndWait',
                     blockType: BlockType.REPORTER,
-                    text: '[method]请求[url]并等待',
+                    text: '[method]请求[url]并等待，返回[type]',
                     arguments: {
                         method: {
                             type: ArgumentType.STRING,
@@ -289,6 +304,11 @@ class Scratch3JsonBlocks {
                         url: {
                             type: ArgumentType.STRING,
                             defaultValue: 'https://saobby.pythonanywhere.com/api/get_current_time'
+                        },
+                        type: {
+                            type: ArgumentType.STRING,
+                            defaultValue: '原文',
+                            menu:'type'
                         },
                     }
                 },
@@ -357,7 +377,8 @@ class Scratch3JsonBlocks {
             ],
             menus: {
                 method: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD', 'TRACE', 'CONNECT'],
-                m: ['error', 'result', 'status']
+                m: ['error', 'result', 'status'],
+                type:['原文','base64','blob url']
                 /*urlNames: {
                     acceptReporters: true,
                     items: [{
@@ -473,11 +494,22 @@ class Scratch3JsonBlocks {
                 })
                     .then(d => {
                         temp2.fetch.status = d.status
+                        if(a.type=='base64' || a.type=='blob url')
+                        return d.blob();
                         return d.text();
                     })
-                    .then(res => {
+                    .then(async res => {
                         // temp2.fetch.status=""
                         temp2.fetch.error = ''
+                        // console.log(res)
+                        if(a.type=='base64') 
+                        res=await new Promise( callback =>{
+                            let reader = new FileReader() ;
+                            reader.onload = function(){ callback(this.result) } ;
+                            reader.readAsDataURL(res) ;
+                        });
+                        if(a.type=='blob url')
+                        res=URL.createObjectURL(res)
                         resolve(temp2.fetch.res = res)
                     })
                     .catch(e => {
@@ -490,14 +522,14 @@ class Scratch3JsonBlocks {
             }
             var getList = () => {
                 try {
-                    console.log(this.writeList)
+                    // console.log(this.writeList)
                     //打包器环境下放开白名单限制
                     if (typeof webpackJsonp !== 'undefined') {
                         request();
                         return;
                     }
                     if (this.writeList) {
-                        if (this.writeList.indexOf((new URL(a.url)).host) == -1) {
+                        if (this.writeList.indexOf((new URL(a.url)).host) == -1 && !a.url.startsWith('blob:')) {
                             temp2.fetch.error = '出于安全性考虑，此接口暂不可请求';
                             resolve('错误：详见error模块');
                             return;
@@ -607,14 +639,19 @@ class Scratch3JsonBlocks {
         }
     }
     setv({ a, b }, util) {
-        console.log(util.thread)
+        // console.log(util.thread)
         util.thread.values || (util.thread.values = {});
-        util.thread.values.a = b
+        util.thread.values[a] = b
+    }
+    addv({ a, b }, util) {
+        // console.log(util.thread)
+        util.thread.values || (util.thread.values = {});
+        util.thread.values[a] += b
     }
     getv({ a, b }, util) {
-        console.log(util.thread)
+        // console.log(util.thread)
         util.thread.values || (util.thread.values = {});
-        return util.thread.values.a
+        return util.thread.values[a]
     }
 }
 

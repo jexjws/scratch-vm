@@ -285,7 +285,26 @@ class Scratch3CommunityBlocks {
             {
                 opcode: 'replace',
                 blockType: BlockType.REPORTER,
-                text: '将[a]中的[b]替换(replace)成[c]',
+                text: '将[a]中的第一个[b]替换(replace)成[c]',
+                arguments: {
+                    b: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'scratch',
+                    },
+                    a: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'I love scratch.',
+                    },
+                    c:{
+                        type: ArgumentType.STRING,
+                        defaultValue: '40code',
+                    }
+                }
+            },
+            {
+                opcode: 'replaceAll',
+                blockType: BlockType.REPORTER,
+                text: '将[a]中的所有[b]替换(replace)成[c]',
                 arguments: {
                     b: {
                         type: ArgumentType.STRING,
@@ -405,6 +424,26 @@ class Scratch3CommunityBlocks {
                     },
                 }
             },
+            {
+                opcode: 'whenc',
+                blockType: BlockType.HAT,
+                text: '当[c]变化时',
+                arguments: {
+                    c: {
+                        type: ArgumentType.BOOLEAN,
+                    },
+                }
+            },
+            {
+                opcode: 'c',
+                blockType: BlockType.COMMAND,
+                text: '[c]',
+                arguments: {
+                    c: {
+                        type: ArgumentType.STRING,
+                    },
+                }
+            },
             '连接',
             {
                 opcode: 'lj',
@@ -485,8 +524,19 @@ class Scratch3CommunityBlocks {
                         type: ArgumentType.STRING,
                         defaultValue: 'd'
                     },
-                }
+                },
             },
+            '一些字符',
+            {
+                opcode: 'n',
+                blockType: BlockType.REPORTER,
+                text: '\\n(换行符)',
+            },
+            {
+                opcode: 'PI',
+                blockType: BlockType.REPORTER,
+                text: 'π(派)',
+            }
             ],
             menus: {
                 USER_ATTR: ['user id', 'username'/*, 'user level'*/],
@@ -495,6 +545,14 @@ class Scratch3CommunityBlocks {
                 operator:['==','>=','<=','!=','<','>']
             }
         };
+    }
+
+    n(){
+        return '\n'
+    }
+
+    PI(){
+        return Math.PI;
     }
 
     lj({a,b,c}){
@@ -711,6 +769,14 @@ class Scratch3CommunityBlocks {
             return e;
         }
     }
+    replaceAll(a) {
+        try{
+            let v=a.b.toString();
+            return a.a.toString().replaceAll((v),a.c);
+        }catch(e){
+            return e;
+        }
+    }
     zz3({a,b}){
         try {
             return (new RegExp(b.toString())).test(a.toString())
@@ -794,6 +860,14 @@ class Scratch3CommunityBlocks {
     when({c}){
         return c;
     }
+    whenc({c}){
+        if(this.tc!==c){
+            this.tc=c
+            return 1;
+        }
+        return 0;
+    }
+    c(){}
     /*
         pay(args, util) {
             var self = this;
