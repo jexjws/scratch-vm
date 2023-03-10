@@ -2036,6 +2036,180 @@ async function coolcash(uri, clamp){
  * @param {Runtime} runtime - the runtime instantiating this block package.
  * @constructor
  */
+
+ 
+  // Simplified remake of an icon by True-Fantom
+  const icon = 'data:image/svg+xml,' + encodeURIComponent(`
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0,0,360,360">
+      <circle cx="180" cy="180" r="180" fill="#9966FF"/>
+      <path d="M180,350
+       c-25,-85  -77,-137 -162,-162
+       c 85,-25  137, -77  162,-162
+       c 25, 85   77, 137  162, 162
+       c-85, 25 -137,  77 -162, 162z" stroke-width="0" fill="#ffffff"/>
+    </svg>`);
+
+
+  let toCorrectThing = null;
+  let active = false;
+  let flipY = false;
+  const _drawThese = renderer._drawThese;
+  // const gl = renderer._gl;
+//   const canvas = renderer.canvas;
+  let width2 = 0;
+  let height2 = 0;
+  let scratchUnitWidth = 480;
+  let scratchUnitHeight = 360;
+
+
+  renderer._drawThese = function (drawables, drawMode, projection, opts) {
+    active = true;
+    [scratchUnitWidth, scratchUnitHeight] = renderer.getNativeSize();
+    _drawThese.call(this, drawables, drawMode, projection, opts);
+    gl.disable(gl.SCISSOR_TEST);
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    active = false;
+  };
+
+  const bfb = gl.bindFramebuffer;
+  gl.bindFramebuffer = function (target, framebuffer) {
+    if (target == gl.FRAMEBUFFER) {
+      if (framebuffer == null) {
+        toCorrectThing = true;
+        flipY = false;
+        width2 = canvas.width;
+        height2 = canvas.height;
+      } else if (renderer._penSkinId) {
+        const fbInfo = renderer._allSkins[renderer._penSkinId]._framebuffer;
+        if (framebuffer == fbInfo.framebuffer) {
+          toCorrectThing = true;
+          flipY = true;
+          width2 = fbInfo.width;
+          height2 = fbInfo.height;
+        } else {
+          toCorrectThing = false;
+        }
+      } else {
+        toCorrectThing = false;
+      }
+    }
+    bfb.call(this, target, framebuffer);
+  };
+
+  // Getting Drawable
+  const dr = renderer.createDrawable('background');
+  const DrawableProto = renderer._allDrawables[dr].__proto__;
+  renderer.destroyDrawable(dr, 'background');
+
+  // Modifying and expanding Drawable
+  const gu = DrawableProto.getUniforms;
+  DrawableProto.getUniforms = function () {
+    if (active && toCorrectThing) {
+      if (this.clipbox) {
+        gl.enable(gl.SCISSOR_TEST);
+        let x = (this.clipbox.x / scratchUnitWidth + 0.5) * width2;
+        let y = (this.clipbox.y / scratchUnitHeight + 0.5) * height2;
+        let w = (this.clipbox.w / scratchUnitWidth) * width2;
+        let h = (this.clipbox.h / scratchUnitHeight) * height2;
+        if (flipY) {
+          y = (-(this.clipbox.y + this.clipbox.h) / scratchUnitHeight + 0.5) * height2;
+        }
+        gl.scissor(x, y, w, h);
+      } else {
+        gl.disable(gl.SCISSOR_TEST);
+      }
+      if (this.additiveBlend) {
+        gl.blendFunc(gl.ONE, gl.ONE);
+      } else {
+        gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      }
+    }
+    return gu.call(this);
+  };
+  DrawableProto.updateClipBox = function (clipbox) {
+    this.clipbox = clipbox;
+  };
+  DrawableProto.updateAdditiveBlend = function (enabled) {
+    this.additiveBlend = enabled;
+  };
+
+
+  // Expanding renderer
+  renderer.updateDrawableClipBox = function (drawableID, clipbox) {
+    const drawable = this._allDrawables[drawableID];
+    if (!drawable) return;
+    drawable.updateClipBox(clipbox);
+  };
+  renderer.updateDrawableAdditiveBlend = function (drawableID, enabled) {
+    const drawable = this._allDrawables[drawableID];
+    if (!drawable) return;
+    drawable.updateAdditiveBlend(enabled);
+  };
+
+
+  // Reset on stop & clones inherit effects
+  const regTargetStuff = function (args) {
+    if (args.editingTarget) {
+      vm.removeListener('targetsUpdate', regTargetStuff);
+      const proto = vm.runtime.targets[0].__proto__;
+      const osa = proto.onStopAll;
+      proto.onStopAll = function () {
+        this.renderer.updateDrawableClipBox.call(renderer, this.drawableID, null);
+        this.renderer.updateDrawableAdditiveBlend.call(renderer, this.drawableID, false);
+        osa.call(this);
+      };
+      const mc = proto.makeClone;
+      proto.makeClone = function () {
+        const newTarget = mc.call(this);
+        if (this.clipbox) {
+          newTarget.clipbox = Object.assign({}, this.clipbox);
+          newTarget.additiveBlend = this.additiveBlend;
+          renderer.updateDrawableClipBox.call(renderer, newTarget.drawableID, this.clipbox);
+          renderer.updateDrawableAdditiveBlend.call(renderer, newTarget.drawableID, this.additiveBlend);
+        }
+        return newTarget;
+      };
+    }
+  };
+  vm.on('targetsUpdate', regTargetStuff);
+
+
+  let cameraX = 0;
+  let cameraY = 0;
+  let cameraZoom = 100;
+  let cameraBG = '#ffffff';
+
+  vm.runtime.runtimeOptions.fencing = false;
+  vm.renderer.offscreenTouching = true;
+
+  function updateCamera() {
+    vm.renderer.setStageSize(
+      vm.runtime.stageWidth / -2 + cameraX,
+      vm.runtime.stageWidth / 2 + cameraX,
+      vm.runtime.stageHeight / -2 + cameraY,
+      vm.runtime.stageHeight / 2 + cameraY
+    );
+    vm.renderer._projection[15] = 100 / cameraZoom;
+  }
+
+  // tell resize to update camera as well
+  vm.runtime.on('STAGE_SIZE_CHANGED', _=>updateCamera());
+
+  function doFix() {
+    vm.runtime.emit('STAGE_SIZE_CHANGED', vm.runtime.stageWidth, vm.runtime.stageHeight);
+  }
+
+  // fix mouse positions
+  let oldSX = vm.runtime.ioDevices.mouse.getScratchX;
+  let oldSY = vm.runtime.ioDevices.mouse.getScratchY;
+
+  vm.runtime.ioDevices.mouse.getScratchX = function(...a){
+    return (oldSX.apply(this, a) + cameraX) / cameraZoom * 100;
+  };
+  vm.runtime.ioDevices.mouse.getScratchY = function(...a){
+    return (oldSY.apply(this, a) + cameraY) / cameraZoom * 100;
+  };
+
 class Scratch3CommunityBlocks {
     constructor(runtime) {
 
@@ -2509,7 +2683,188 @@ class Scratch3CommunityBlocks {
                         defaultValue: '255'
                       }
                     }
-                  }
+                  },
+                  "角色裁剪",
+                  {
+                    opcode: 'setClipbox',
+                    blockType: BlockType.COMMAND,
+                    text: '设置裁剪区域 x1:[X1] y1:[Y1] x2:[X2] y2:[Y2]',
+                    arguments: {
+                      X1: {
+                        type: ArgumentType.NUMBER,
+                        defaultValue: '0'
+                      },
+                      Y1: {
+                        type: ArgumentType.NUMBER,
+                        defaultValue: '0'
+                      },
+                      X2: {
+                        type: ArgumentType.NUMBER,
+                        defaultValue: '100'
+                      },
+                      Y2: {
+                        type: ArgumentType.NUMBER,
+                        defaultValue: '100'
+                      }
+                    },
+                    // filter: [TargetType.SPRITE]
+                  },
+                  {
+                    opcode: 'clearClipbox',
+                    blockType: BlockType.COMMAND,
+                    text: '复原裁剪区域',
+                    // filter: [TargetType.SPRITE]
+                  },
+                  {
+                    opcode: 'getClipbox',
+                    blockType: BlockType.REPORTER,
+                    text: '裁剪区域 [PROP]',
+                    arguments: {
+                      PROP: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'width',
+                        menu: 'props'
+                      }
+                    },
+                    // filter: [TargetType.SPRITE]
+                  },
+                  '---',
+                  {
+                    opcode: 'setAdditiveBlend',
+                    blockType: BlockType.COMMAND,
+                    text: 'turn additive blending [STATE]',
+                    arguments: {
+                      STATE: {
+                        type: ArgumentType.STRING,
+                        defaultValue: 'on',
+                        menu: 'states'
+                      }
+                    },
+                    // filter: [TargetType.SPRITE]
+                  },
+                  {
+                    opcode: 'getAdditiveBlend',
+                    blockType: BlockType.BOOLEAN,
+                    text: 'is additive blending on?',
+                    // filter: [TargetType.SPRITE]
+                  },
+                  "相机控制",
+                  {
+                    opcode: 'setBoth',
+                    blockType: BlockType.COMMAND,
+                    text: '设置相机到 x: [x] y: [y]',
+                    arguments: {
+                      x: {
+                        type: ArgumentType.NUMBER,
+                        defaultValue: 0
+                      },
+                      y: {
+                        type: ArgumentType.NUMBER,
+                        defaultValue: 0
+                      },
+                    }
+                  },
+                  '---',
+                  {
+                    opcode: 'changeZoom',
+                    blockType: BlockType.COMMAND,
+                    text: '以 [val] 更改相机缩放 ',
+                    arguments: {
+                      val: {
+                        type: ArgumentType.NUMBER,
+                        defaultValue: 10
+                      }
+                    }
+                  },
+                  {
+                    opcode: 'setZoom',
+                    blockType: BlockType.COMMAND,
+                    text: '设置相机缩放 [val] %',
+                    arguments: {
+                      val: {
+                        type: ArgumentType.NUMBER,
+                        defaultValue: 100
+                      }
+                    }
+                  },
+                  '---',
+                  {
+                    opcode: 'changeX',
+                    blockType: BlockType.COMMAND,
+                    text: '将相机缩放x增加[val]',
+                    arguments: {
+                      val: {
+                        type: ArgumentType.NUMBER,
+                        defaultValue: 10
+                      }
+                    }
+                  },
+                  {
+                    opcode: 'setX',
+                    blockType: BlockType.COMMAND,
+                    text: '设置相机缩放x[val]',
+                    arguments: {
+                      val: {
+                        type: ArgumentType.NUMBER,
+                        defaultValue: 0
+                      }
+                    }
+                  },
+                  {
+                    opcode: 'changeY',
+                    blockType: BlockType.COMMAND,
+                    text: '将相机缩放y增加[val]',
+                    arguments: {
+                      val: {
+                        type: ArgumentType.NUMBER,
+                        defaultValue: 10
+                      }
+                    }
+                  },
+                  {
+                    opcode: 'setY',
+                    blockType: BlockType.COMMAND,
+                    text: '设置相机缩放y[val]',
+                    arguments: {
+                      val: {
+                        type: ArgumentType.NUMBER,
+                        defaultValue: 0
+                      }
+                    }
+                  },
+                  "---",
+                  {
+                    opcode: 'getX',
+                    blockType: BlockType.REPORTER,
+                    text: '相机 x',
+                  },
+                  {
+                    opcode: 'getY',
+                    blockType: BlockType.REPORTER,
+                    text: '相机 y',
+                  },
+                  {
+                    opcode: 'getZoom',
+                    blockType: BlockType.REPORTER,
+                    text: '相机 缩放',
+                  },
+                  '---',
+                  {
+                    opcode: 'setCol',
+                    blockType: BlockType.COMMAND,
+                    text: '设置背景颜色为 [val]',
+                    arguments: {
+                      val: {
+                        type: ArgumentType.COLOR
+                      }
+                    }
+                  },
+                  {
+                    opcode: 'getCol',
+                    blockType: BlockType.REPORTER,
+                    text: '背景颜色',
+                  },
+
             ],
             menus: {
                 enabled: {
@@ -2649,6 +3004,47 @@ class Scratch3CommunityBlocks {
                   },
                   TFmenu: {
                     items: ['true',"false"]
+                  },states: {
+                    acceptReporters: true,
+                    items: [
+                      {
+                        text: '开启',
+                        value: 'on'
+                      },
+                      {
+                        text: '关闭',
+                        value: 'off'
+                      }
+                    ]
+                  },
+                  props: {
+                    acceptReporters: true,
+                    items: [
+                      {
+                        text: '宽',
+                        value: 'width'
+                      },
+                      {
+                        text: '高',
+                        value: 'height'
+                      },
+                      {
+                        text: 'x最小值',
+                        value: 'min x'
+                      },
+                      {
+                        text: 'y最小值',
+                        value: 'min y'
+                      },
+                      {
+                        text: 'x最大值',
+                        value: 'max x'
+                      },
+                      {
+                        text: 'y最大值',
+                        value: 'max y'
+                      }
+                    ]
                   },
             }
         };
@@ -2946,6 +3342,121 @@ class Scratch3CommunityBlocks {
         quadColors[21] = convertg
         quadColors[22] = convertb
         quadColors[23] = converta
+      }
+
+      setBoth(ARGS) {
+        cameraX = +ARGS.x;
+        cameraY = +ARGS.y;
+        doFix();
+      }
+      changeZoom(ARGS) {
+        cameraZoom += +ARGS.val;
+        doFix();
+      }
+      setZoom(ARGS) {
+        cameraZoom = +ARGS.val;
+        doFix();
+      }
+      changeX(ARGS) {
+        cameraX += +ARGS.val;
+        doFix();
+      }
+      setX(ARGS) {
+        cameraX = +ARGS.val;
+        doFix();
+      }
+      changeY(ARGS) {
+        cameraY += +ARGS.val;
+        doFix();
+      }
+      setY(ARGS) {
+        cameraY = +ARGS.val;
+        doFix();
+      }
+      getX() {
+        return cameraX;
+      }
+      getY() {
+        return cameraY;
+      }
+      getZoom() {
+        return cameraZoom;
+      }
+      setCol(ARGS) {
+        cameraBG = ARGS.val;
+        console.log(cameraBG)
+        vm.renderer.setBackgroundColor(
+          ( cameraBG % 256 ) / 255,
+          ( parseInt(cameraBG/256) % 256 ) / 255,
+          ( parseInt(cameraBG/256/256) % 256 ) / 255
+        );
+      }
+      getCol() {
+        return cameraBG;
+      }
+      setClipbox ({X1, Y1, X2, Y2}, {target}) {
+        if (target.isStage) return;
+        const newClipbox = {
+          x: Math.min(X1, X2),
+          y: Math.min(Y1, Y2),
+          w: Math.max(X1, X2) - Math.min(X1, X2),
+          h: Math.max(Y1, Y2) - Math.min(Y1, Y2)
+        };
+        target.clipbox = newClipbox;
+        renderer.updateDrawableClipBox.call(renderer, target.drawableID, newClipbox);
+        if (target.visible) {
+          renderer.dirty = true;
+          target.emitVisualChange();
+          target.runtime.requestRedraw();
+          target.runtime.requestTargetsUpdate(target);
+        }
+      }
+  
+      clearClipbox (args, {target}) {
+        if (target.isStage) return;
+        target.clipbox = null;
+        renderer.updateDrawableClipBox.call(renderer, target.drawableID, null);
+        if (target.visible) {
+          renderer.dirty = true;
+          target.emitVisualChange();
+          target.runtime.requestRedraw();
+          target.runtime.requestTargetsUpdate(target);
+        }
+      }
+  
+      setAdditiveBlend ({STATE}, {target}) {
+        let newValue = null;
+        if (STATE === 'on') newValue = true;
+        if (STATE === 'off') newValue = false;
+        if (newValue === null) return;
+  
+        if (target.isStage) return;
+        target.additiveBlend = newValue;
+        renderer.updateDrawableAdditiveBlend.call(renderer, target.drawableID, newValue);
+        if (target.visible) {
+          renderer.dirty = true;
+          target.emitVisualChange();
+          target.runtime.requestRedraw();
+          target.runtime.requestTargetsUpdate(target);
+        }
+      }
+  
+      getClipbox ({PROP}, {target}) {
+        const clipbox = target.clipbox;
+        if (!clipbox) return '';
+        switch (PROP) {
+          case 'width': return clipbox.w;
+          case 'height': return clipbox.h;
+          case 'min x': return clipbox.x;
+          case 'min y': return clipbox.y;
+          case 'max x': return clipbox.x + clipbox.w;
+          case 'max y': return clipbox.y + clipbox.h;
+          default: return '';
+        }
+      }
+  
+      getAdditiveBlend (args, {target}) {
+        return target.additiveBlend ?? false;
       }
 
 }
