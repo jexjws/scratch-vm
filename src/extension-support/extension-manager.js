@@ -50,7 +50,8 @@ const builtinExtensions = {
     tc: () => require('../extensions/scratch3_tc'),
     touch: () => require('../extensions/scratch3_touch'),
     // tw: core extension
-    tw: () => require('../extensions/tw')
+    tw: () => require('../extensions/tw'),
+    text: () => require('../extensions/text')
 };
 
 window.builtinExtensions=builtinExtensions;
