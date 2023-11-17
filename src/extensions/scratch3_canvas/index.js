@@ -40,6 +40,8 @@ const StageLayering = require('../../engine/stage-layering');*/
   }
     const { vm,BlockType, ArgumentType, Cast ,Clone,log,Color,MathUtil,RenderedTarget,StageLayering} = Scratch;
     const renderer = vm.renderer;
+    const runtime = vm.runtime;
+    let _penSkinId
     const blockIconURI = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii00NTkgMjYxIDQwIDQwIj48cGF0aCBkPSJNLTQ0NC40IDI5MC41bC0zLjYtMy42cy0xLjEgMS40LTMuOC44bC0zLjQgOS41Yy0uMS4zLjIuNi41LjVsOS41LTMuNGMtLjYtMi43LjgtMy44LjgtMy44eiIgZmlsbD0iI2Y3YzY3ZiIgc3Ryb2tlPSIjNTc1ZTc1IiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiLz48cGF0aCBkPSJNLTQ0MS45IDI5MC40bDE5LjUtMjIuMXMxLjMtMS42LS4yLTMuMWMtMS42LTEuNS0zLjEtLjItMy4xLS4ybC0yMi4xIDE5LjUtLjIgMi41IDEuOCAxLjggMS44IDEuOCAyLjUtLjJ6IiBmaWxsPSIjZjQ2ZDM4IiBzdHJva2U9IiM1NzVlNzUiIHN0cm9rZS1taXRlcmxpbWl0PSIxMCIvPjxwYXRoIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzU3NWU3NSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIGQ9Ik0tNDU1LjEgMjk3LjZsMy44LTMuOCIvPjxwYXRoIGZpbGw9IiM5NWQ4ZDYiIHN0cm9rZT0iIzU3NWU3NSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIGQ9Ik0tNDQ2LjUgMjgzLjFsNS44IDUuOCAyLjktMy4yLTUuNC01LjR6Ii8+PHBhdGggZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjNTc1ZTc1IiBzdHJva2UtbWl0ZXJsaW1pdD0iMTAiIGQ9Ik0tNDQzLjYgMjg2bC0yLjktMi45LTEuMyAxLjItLjMgMi42IDMuNyAzLjYgMi41LS4xIDEuMi0xLjV6Ii8+PHBhdGggZD0iTS00NDQuOCAyOTAuMmwyLjYtLjIgMTkuNC0yMnMuOC0xLjEuMS0yLjFsLTMwLjkgMzAuOCA3LjgtMi43Yy0uNC0yLjIuNi0zLjUgMS0zLjh6IiBvcGFjaXR5PSIuMiIgZmlsbD0iIzM1MzUzNSIvPjwvc3ZnPg==';
 class Scratch3CanvasBlocks {
     constructor(runtime) {
@@ -47,7 +49,7 @@ class Scratch3CanvasBlocks {
          * The runtime instantiating this block package.
          * @type {Runtime}
          */
-        this.runtime = runtime;
+        //this.runtime = runtime;
         this._penSkinId = -2;
         // this._penDrawableId = -2;
     }
